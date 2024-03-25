@@ -1,0 +1,93 @@
+{
+	"name": "file-formatify",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"description": "Wiki for mobile game Brown Dust 2",
+	"scripts": {
+		"utility-scripts": "====================utilities========================",
+		"un": "rm -rf node_modules && rm -rf package-lock.json",
+		"setup": " npm run un && npm i && npx husky install",
+		"pretty": "prettier --write .",
+		"lint": "eslint . --ext .js,.jsx,.ts,.tsx,.md,.json,.yml --fix",
+		"tcm": "tcm src",
+		"building-block-scripts": "=============building-blocks===================",
+		"tsc": "tsc",
+		"use_regular_html": "cp -fr index.regular.html index.html",
+		"build": "vite build --config vite.sw.config.ts && vite build",
+		"dev-scripts": "======================dev(local client side)===========================",
+		"use_dev_config": "cp -fr src/config.dev.ts src/config.ts",
+		"use_dev_manifest": "cp -fr manifest.dev.json manifest.json",
+		"dev": "npm run use_dev_config && npm run tcm && vite --host",
+		"preview": "npm run use_dev_config && npm run build && vite preview --host",
+		"prod-scripts": "======================prod===========================",
+		"use_prod_config": "cp -fr src/config.prod.ts src/config.ts",
+		"use_prod_manifest": "cp -fr manifest.prod.json manifest.json",
+		"prod-build": "npm run use_prod_config && npm run tcm && tsc && npm run use_prod_manifest && npm run build"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tylim88/File-Formatify.git"
+	},
+	"author": "tylim",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/tylim88/File-Formatify/issues"
+	},
+	"homepage": "https://github.com/tylim88/File-Formatify#readme",
+	"lint-staged": {
+		"!(package-lock)*.{js,jsx,ts,tsx,md,json,yml}": [
+			"eslint --fix --config .eslintrc.cjs",
+			"prettier --write"
+		]
+	},
+	"dependencies": {
+		"@mantine/core": "^7.4.2",
+		"@mantine/hooks": "^7.4.2",
+		"@tabler/icons-react": "^2.46.0",
+		"@tanstack/react-router": "^1.8.3",
+		"@tanstack/router-devtools": "^1.8.3",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-helmet-async": "^2.0.4",
+		"react-router-dom": "^6.21.3"
+	},
+	"devDependencies": {
+		"@types/glob": "^8.1.0",
+		"@types/node": "^20.11.5",
+		"@types/react": "^18.2.48",
+		"@types/react-dom": "^18.2.18",
+		"@typescript-eslint/eslint-plugin": "^6.19.0",
+		"@typescript-eslint/parser": "^6.19.0",
+		"@vitejs/plugin-react-swc": "^3.5.0",
+		"eruda": "^3.0.1",
+		"eslint": "^8.56.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-import": "^2.29.1",
+		"eslint-plugin-json": "^3.1.0",
+		"eslint-plugin-markdown": "^3.0.1",
+		"eslint-plugin-prettier": "^5.1.3",
+		"eslint-plugin-react": "^7.33.2",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"eslint-plugin-react-refresh": "^0.4.5",
+		"eslint-plugin-unused-imports": "^3.0.0",
+		"eslint-plugin-yml": "^1.12.2",
+		"lint-staged": "^15.2.0",
+		"postcss": "^8.4.33",
+		"postcss-preset-mantine": "^1.12.3",
+		"postcss-simple-vars": "^7.0.1",
+		"prettier": "^3.2.4",
+		"type-fest": "^4.9.0",
+		"typed-css-modules": "^0.8.1",
+		"typescript": "^5.3.3",
+		"vite": "^5.0.12",
+		"vite-plugin-dynamic-import": "^1.5.0",
+		"vite-plugin-mkcert": "^1.17.3",
+		"vite-plugin-qrcode": "^0.2.3",
+		"vite-plugin-remove-console": "^2.2.0",
+		"vite-plugin-static-copy": "^1.0.0",
+		"vite-plugin-svgr": "^4.2.0",
+		"vite-plugin-vsharp": "^1.7.3",
+		"vite-tsconfig-paths": "^4.3.1"
+	}
+}

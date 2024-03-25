@@ -1,0 +1,22 @@
+{
+	"explorer.fileNesting.patterns": {
+		".gitignore": ".gitattributes, .gitmodules, .gitmessage, .mailmap, .git-blame*",
+		"readme.*": "authors, backers.md, changelog*, citation*, code_of_conduct.md, codeowners, contributing.md, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors.md, note.txt",
+		"tsconfig.json": "tsconfig.*",
+		"package.json": "package-lock.json",
+		"*.ts": "$(capture).*.ts",
+		".prettierrc.js": ".prettierignore",
+		"vitest.config.ts": "vitest.*",
+		"index.html": "index.*.html",
+		"vite.config.ts": "vite.*.ts",
+		"manifest.json": "manifest.*.json",
+		"*.tsx": "$(capture).css, $(capture).*.css, $(capture).*.d.ts"
+	},
+	"cssVariables.lookupFiles": [
+		"**/*.css",
+		"**/*.scss",
+		"**/*.sass",
+		"**/*.less",
+		"node_modules/@mantine/core/styles.css"
+	]
+}
