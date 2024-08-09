@@ -1,26 +1,26 @@
 import { persistent } from './utils'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { toBlobURL, fetchFile } from '@ffmpeg/util'
-
+import { FileWithPath } from '@mantine/dropzone'
 const initialState = {
 	isLoaded: false,
 	message: null,
-	results: [],
+	items: [],
 }
 const ffmpeg = new FFmpeg()
-export const useAlertStore = persistent<{
+export const useFFmpegStore = persistent<{
 	load: () => void
 	isLoaded: boolean
 	message: null | string
 	transcode: (index: number) => void
-	results: ((
+	items: ((
 		| {
-				newUrl: string
+				outputURL: string
 				status: 'done'
 		  }
 		| { status: 'loading' }
 		| { status: 'idle' }
-	) & { url: string })[]
+	) & { inputFile: FileWithPath })[]
 }>(
 	{
 		name: 'alert',
@@ -59,9 +59,9 @@ export const useAlertStore = persistent<{
 			set({ ...initialState, isLoaded: get().isLoaded })
 		},
 		transcode: async index => {
-			const { results, isLoaded } = get()
-			const result = get().results[index]
-			if (!result) return
+			const { items, isLoaded } = get()
+			const item = get().items[index]
+			if (!item) return
 			while (!isLoaded) {
 				await new Promise(res => {
 					setTimeout(() => {
@@ -69,22 +69,21 @@ export const useAlertStore = persistent<{
 					}, 1000)
 				}).catch(console.error)
 			}
-			results[index] = { ...result, status: 'loading' }
-			const videoURL = result.url
-			const inputPath = `input_${index}.avi`
-			const outputPath = `output_${index}.mp4`
-			await ffmpeg.writeFile(inputPath, await fetchFile(videoURL))
-			await ffmpeg.exec(['-i', inputPath, outputPath])
+			items[index] = { ...item, status: 'loading' }
+			const { name, path } = item.inputFile
+			if (!path) return
+			const outputPath = `${name}.mp4`
+			await ffmpeg.exec(['-i', path, outputPath])
 			const fileData = await ffmpeg.readFile(outputPath)
 			const data = new Uint8Array(fileData as ArrayBuffer)
-			results[index] = {
-				...result,
+			items[index] = {
+				...item,
 				status: 'done',
-				newUrl: URL.createObjectURL(
+				outputURL: URL.createObjectURL(
 					new Blob([data.buffer], { type: 'video/mp4' })
 				),
 			}
-			set({ results })
+			set({ items })
 		},
 	})
 )

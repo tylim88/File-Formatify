@@ -1,11 +1,21 @@
 import { Text, Group, rem } from '@mantine/core'
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone'
 import { IconVideo, IconX, IconUpload } from '@tabler/icons-react'
+import { useFFmpegStore } from '@/stores'
 
 export function DropzoneButton() {
 	return (
 		<Dropzone
-			onDrop={files => console.log('accepted files', files)}
+			onDrop={files => {
+				useFFmpegStore.setState({
+					items: files.map(file => {
+						return {
+							status: 'idle',
+							inputFile: file,
+						}
+					}),
+				})
+			}}
 			onReject={files => console.log('rejected files', files)}
 			bg="#EFEEF3"
 			style={{ border: 'solid' }}
