@@ -1,67 +1,71 @@
-import { useRef } from 'react'
-import { Text, Group, Button, rem, useMantineTheme } from '@mantine/core'
+import { Text, Group, rem } from '@mantine/core'
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone'
-import { IconCloudUpload, IconX, IconDownload } from '@tabler/icons-react'
-import classes from './DropzoneButton.module.css'
+import { IconVideo, IconX, IconUpload } from '@tabler/icons-react'
 
 export function DropzoneButton() {
-	const theme = useMantineTheme()
-	const openRef = useRef<() => void>(null)
-
 	return (
-		<div className={classes.wrapper}>
-			<Dropzone
-				openRef={openRef}
-				onDrop={() => {}}
-				className={classes.dropzone}
-				radius="md"
-				accept={[MIME_TYPES.pdf]}
-				maxSize={30 * 1024 ** 2}
+		<Dropzone
+			onDrop={files => console.log('accepted files', files)}
+			onReject={files => console.log('rejected files', files)}
+			bg="#EFEEF3"
+			style={{ border: 'solid' }}
+			accept={[
+				MIME_TYPES.mp4,
+				'video/x-flv',
+				'application/x-mpegURL',
+				'video/MP2T',
+				'video/3gpp',
+				'video/quicktime',
+				'video/x-msvideo',
+				'video/x-ms-wmv',
+			]}
+		>
+			<Group
+				justify="center"
+				gap="xl"
+				mih={220}
+				style={{ pointerEvents: 'none' }}
 			>
-				<div style={{ pointerEvents: 'none' }}>
-					<Group justify="center">
-						<Dropzone.Accept>
-							<IconDownload
-								style={{ width: rem(50), height: rem(50) }}
-								color={theme.colors.blue[6]}
-								stroke={1.5}
-							/>
-						</Dropzone.Accept>
-						<Dropzone.Reject>
-							<IconX
-								style={{ width: rem(50), height: rem(50) }}
-								color={theme.colors.red[6]}
-								stroke={1.5}
-							/>
-						</Dropzone.Reject>
-						<Dropzone.Idle>
-							<IconCloudUpload
-								style={{ width: rem(50), height: rem(50) }}
-								stroke={1.5}
-							/>
-						</Dropzone.Idle>
-					</Group>
+				<Dropzone.Accept>
+					<IconUpload
+						style={{
+							width: rem(52),
+							height: rem(52),
+							color: 'var(--mantine-color-blue-6)',
+						}}
+						stroke={1.5}
+					/>
+				</Dropzone.Accept>
+				<Dropzone.Reject>
+					<IconX
+						style={{
+							width: rem(52),
+							height: rem(52),
+							color: 'var(--mantine-color-red-6)',
+						}}
+						stroke={1.5}
+					/>
+				</Dropzone.Reject>
+				<Dropzone.Idle>
+					<IconVideo
+						style={{
+							width: rem(52),
+							height: rem(52),
+							color: 'var(--mantine-color-dimmed)',
+						}}
+						stroke={1.5}
+					/>
+				</Dropzone.Idle>
 
-					<Text ta="center" fw={700} fz="lg" mt="xl">
-						<Dropzone.Accept>Drop files here</Dropzone.Accept>
-						<Dropzone.Reject>Pdf file less than 30mb</Dropzone.Reject>
-						<Dropzone.Idle>Upload resume</Dropzone.Idle>
+				<div>
+					<Text size="xl" inline>
+						Drag videos here or click to select files
 					</Text>
-					<Text ta="center" fz="sm" mt="xs" c="dimmed">
-						Drag&apos;n&apos;drop files here to upload. We can accept only{' '}
-						<i>.pdf</i> files that are less than 30mb in size.
+					<Text size="sm" c="dimmed" inline mt={7}>
+						Attach as many files as you like, no size limitation!
 					</Text>
 				</div>
-			</Dropzone>
-
-			<Button
-				className={classes.control}
-				size="md"
-				radius="xl"
-				onClick={() => openRef.current?.()}
-			>
-				Select files
-			</Button>
-		</div>
+			</Group>
+		</Dropzone>
 	)
 }

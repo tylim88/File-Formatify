@@ -8,6 +8,8 @@ import { isProduction } from './config'
 import './main.css'
 import '@mantine/core/styles.css'
 import { THEME } from './theme'
+import '@mantine/dropzone/styles.css'
+
 // if ('serviceWorker' in navigator) {
 // 	navigator.serviceWorker.register('./sw.js').catch(error => {
 // 		console.error('Service Worker registration failed:', error)
