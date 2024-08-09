@@ -1,6 +1,6 @@
 import { Router, Route, RootRoute } from '@tanstack/react-router'
 import { App } from './App'
-/* <a href="https://www.flaticon.com/free-icons/convert" title="convert icons">Convert icons created by Freepik - Flaticon</a> */
+import { Home } from './screen'
 const rootRoute = new RootRoute({
 	component: App,
 })
@@ -9,7 +9,7 @@ const getParentRoute = () => rootRoute
 
 export const homeRoute = new Route({
 	path: '/',
-	component: () => null,
+	component: Home,
 	getParentRoute,
 })
 

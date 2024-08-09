@@ -43,6 +43,7 @@
 	},
 	"dependencies": {
 		"@mantine/core": "^7.4.2",
+		"@mantine/dropzone": "^7.7.0",
 		"@mantine/hooks": "^7.4.2",
 		"@tabler/icons-react": "^2.46.0",
 		"@tanstack/react-router": "^1.8.3",
