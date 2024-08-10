@@ -1,7 +1,8 @@
 import { persistent } from './utils'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
-import { toBlobURL, fetchFile } from '@ffmpeg/util'
+import { toBlobURL } from '@ffmpeg/util'
 import { FileWithPath } from '@mantine/dropzone'
+
 const initialState = {
 	isLoaded: false,
 	message: null,

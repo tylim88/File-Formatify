@@ -1,7 +1,10 @@
 import { Text, Group, rem } from '@mantine/core'
-import { Dropzone, MIME_TYPES } from '@mantine/dropzone'
+import { Dropzone } from '@mantine/dropzone'
 import { IconVideo, IconX, IconUpload } from '@tabler/icons-react'
 import { useFFmpegStore } from '@/stores'
+import { videoFormats } from '@/constants'
+
+const mimes = videoFormats.map(({ mime }) => mime)
 
 export function DropzoneButton() {
 	return (
@@ -19,16 +22,7 @@ export function DropzoneButton() {
 			onReject={files => console.log('rejected files', files)}
 			bg="#EFEEF3"
 			style={{ border: 'solid' }}
-			accept={[
-				MIME_TYPES.mp4,
-				'video/x-flv',
-				'application/x-mpegURL',
-				'video/MP2T',
-				'video/3gpp',
-				'video/quicktime',
-				'video/x-msvideo',
-				'video/x-ms-wmv',
-			]}
+			accept={mimes}
 		>
 			<Group
 				justify="center"

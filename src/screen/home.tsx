@@ -1,4 +1,4 @@
-import { DropzoneButton, FooterSocial, Title } from '@/component'
+import { DropzoneButton, FooterSocial, Title, VideoList } from '@/component'
 import { Container, DEFAULT_THEME } from '@mantine/core'
 import { useFFmpegStore } from '@/stores'
 
@@ -17,7 +17,7 @@ export const Home = () => {
 				display="flex"
 				style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}
 			>
-				{item.length > 0 ? null : <DropzoneButton />}
+				{item.length > 0 ? <VideoList /> : <DropzoneButton />}
 			</Container>
 			<FooterSocial />
 		</Container>
