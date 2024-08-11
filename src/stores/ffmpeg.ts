@@ -22,7 +22,12 @@ export const useFFmpegStore = persistent<{
 		autoDownload: boolean
 		selectedUUIDs: string[]
 	}) => void
-	settings: { ext: string; height: number; width: number; bitrate: number }
+	settings: {
+		ext: string
+		height: number | string
+		width: number | string
+		bitrate: number | string
+	}
 	items: ((
 		| {
 				outputPath: string

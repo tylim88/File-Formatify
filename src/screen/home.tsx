@@ -1,5 +1,11 @@
-import { DropzoneButton, FooterSocial, Title, VideoList } from '@/component'
-import { Container } from '@mantine/core'
+import {
+	DropzoneButton,
+	FooterSocial,
+	Title,
+	VideoList,
+	VideoMainControls,
+} from '@/component'
+import { Container, Stack } from '@mantine/core'
 import { useFFmpegStore } from '@/stores'
 
 export const Home = () => {
@@ -20,17 +26,24 @@ export const Home = () => {
 			h="100%"
 		>
 			<Title />
-			<Container
+			<Stack
 				maw="100%"
 				display="flex"
+				align="center"
+				justify={hasItems ? 'start' : 'center'}
 				style={{
 					flexGrow: 1,
-					justifyContent: 'center',
-					alignItems: hasItems ? 'start' : 'center',
 				}}
 			>
-				{hasItems ? <VideoList /> : <DropzoneButton />}
-			</Container>
+				{hasItems ? (
+					<>
+						<VideoMainControls />
+						<VideoList />
+					</>
+				) : (
+					<DropzoneButton />
+				)}
+			</Stack>
 			<FooterSocial />
 		</Container>
 	)

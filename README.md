@@ -1,6 +1,6 @@
 # File-Formatify
 
-Absolutely free no artificial restriction client side video converter web app.
+Absolutely free no artificial restrictions video converter web app.
 
 setup: `npm run setup`  
 dev: `npm run dev`
@@ -13,3 +13,5 @@ techs:
 2. Mantine
 3. Tan Stack Router
 4. Vite
+5. FFmpeg wasm
+6. Zustand
