@@ -1,43 +1,48 @@
 import { persistent } from './utils'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
-import { toBlobURL } from '@ffmpeg/util'
+import { toBlobURL, fetchFile } from '@ffmpeg/util'
 import { FileWithPath } from '@mantine/dropzone'
 
 const initialState = {
-	isLoaded: false,
+	isLoading: false,
+	status: 'idle' as const,
 	message: null,
 	items: [],
 }
 const ffmpeg = new FFmpeg()
 export const useFFmpegStore = persistent<{
 	load: () => void
-	isLoaded: boolean
+	status: 'idle' | 'loading' | 'loaded'
 	message: null | string
-	transcode: (index: number) => void
+	transcode: (props: { index: number; ext: string }) => void
 	items: ((
 		| {
 				outputURL: string
 				status: 'done'
 		  }
-		| { status: 'loading' }
-		| { status: 'idle' }
+		| { status: 'loading' | 'idle' }
 	) & { inputFile: FileWithPath })[]
 }>(
 	{
-		name: 'alert',
+		name: 'ffmpeg',
 		keysToPersist: [],
 	},
 	(set, get) => ({
 		...initialState,
 		load: async () => {
-			const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm'
+			const { status } = get()
+			if (status !== 'idle') return
+			set({ status: 'loading' })
+			const baseURL = isChromium()
+				? 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm'
+				: 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm'
 			ffmpeg.on('log', ({ message }) => {
 				set({ message })
 			})
 			// toBlobURL is used to bypass CORS issue, urls with the same
 			// domain can be used directly.
-			ffmpeg
-				.load({
+			try {
+				await ffmpeg.load({
 					coreURL: await toBlobURL(
 						`${baseURL}/ffmpeg-core.js`,
 						'text/javascript'
@@ -51,40 +56,63 @@ export const useFFmpegStore = persistent<{
 						'text/javascript'
 					),
 				})
-				.then(() => {
-					set({ isLoaded: true })
-				})
-				.catch(console.error)
+				set({ status: 'loaded' })
+			} catch (e) {
+				set({ status: 'idle' })
+				console.error(e)
+			}
 		},
 		reset: () => {
-			set({ ...initialState, isLoaded: get().isLoaded })
+			set({ ...initialState, status: get().status })
 		},
-		transcode: async index => {
-			const { items, isLoaded } = get()
-			const item = get().items[index]
+		transcode: async ({ index, ext }) => {
+			const { items, status } = get()
+			const item = items[index]
 			if (!item) return
-			while (!isLoaded) {
+			set(({ items }) => {
+				items[index] = { ...item, status: 'loading' }
+			})
+
+			while (status !== 'loaded') {
+				if (get().status === 'loaded') break
 				await new Promise(res => {
 					setTimeout(() => {
 						res(null)
 					}, 1000)
 				}).catch(console.error)
 			}
-			items[index] = { ...item, status: 'loading' }
-			const { name, path } = item.inputFile
-			if (!path) return
-			const outputPath = `${name}.mp4`
-			await ffmpeg.exec(['-i', path, outputPath])
-			const fileData = await ffmpeg.readFile(outputPath)
-			const data = new Uint8Array(fileData as ArrayBuffer)
-			items[index] = {
-				...item,
-				status: 'done',
-				outputURL: URL.createObjectURL(
-					new Blob([data.buffer], { type: 'video/mp4' })
-				),
+			const { name, path: inputPath } = item.inputFile
+			if (!inputPath) return
+			const outputPath = `${name.split('.')[0]}${ext}`
+			try {
+				await ffmpeg.writeFile(inputPath, await fetchFile(item.inputFile))
+				await ffmpeg.exec(['-i', inputPath, outputPath])
+				const fileData = await ffmpeg.readFile(outputPath)
+				const data = new Uint8Array(fileData as ArrayBuffer)
+				set(({ items }) => {
+					items[index] = {
+						...item,
+						status: 'done',
+						outputURL: URL.createObjectURL(
+							new Blob([data.buffer], { type: 'video/mp4' })
+						),
+					}
+				})
+			} catch (e) {
+				console.error(e)
+				set(({ items }) => {
+					items[index] = { ...item, status: 'idle' }
+				})
 			}
-			set({ items })
 		},
 	})
 )
+const isChromium = () => {
+	const ua = navigator.userAgent
+	const isChromium = ua.includes('Chrome') || ua.includes('Chromium')
+	const isEdge = ua.includes('Edg')
+	const isOpera = ua.includes('OPR')
+	const isBrave = ua.includes('Brave')
+
+	return isChromium && !isEdge && !isOpera && !isBrave
+}

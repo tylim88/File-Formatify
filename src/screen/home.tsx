@@ -3,7 +3,9 @@ import { Container, DEFAULT_THEME } from '@mantine/core'
 import { useFFmpegStore } from '@/stores'
 
 export const Home = () => {
-	const item = useFFmpegStore(state => state.items)
+	const items = useFFmpegStore(state => state.items)
+
+	const hasItems = items.length > 0
 
 	return (
 		<Container
@@ -14,10 +16,11 @@ export const Home = () => {
 		>
 			<Title />
 			<Container
+				maw="100%"
 				display="flex"
 				style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}
 			>
-				{item.length > 0 ? <VideoList /> : <DropzoneButton />}
+				{hasItems ? <VideoList /> : <DropzoneButton />}
 			</Container>
 			<FooterSocial />
 		</Container>
