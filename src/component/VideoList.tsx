@@ -9,6 +9,7 @@ const exts = videoFormats.map(({ ext }) => ext)
 export const VideoList = () => {
 	const items = useFFmpegStore(state => state.items)
 	const selectedExts = useRef<Record<number, string>>({})
+	const buttonRef = useRef<Record<number, HTMLAnchorElement>>({})
 
 	return (
 		<Table>
@@ -26,11 +27,18 @@ export const VideoList = () => {
 						inputFile: { name, size },
 						status,
 					} = item
+
+					if (status === 'done') {
+						const ref = buttonRef.current[index]
+						if (ref) {
+							ref.setAttribute('download', item.outputPath)
+						}
+					}
 					const byte = byteSize(size)
 					return (
 						<Table.Tr key={name}>
 							<Table.Td>
-								<Button size="md">Apply</Button>
+								<Button w="6rem">Apply</Button>
 							</Table.Td>
 							<Table.Td>
 								<Text truncate="start" ta="end" w="16rem">
@@ -53,31 +61,35 @@ export const VideoList = () => {
 								/>
 							</Table.Td>
 							<Table.Td>
-								<Button
-									w="6rem"
-									color="red"
-									{...(status === 'done'
-										? {
-												component: 'a',
-												href: item.outputURL,
+								{status === 'done' ? (
+									<Button
+										ref={r => {
+											if (r) {
+												buttonRef.current[index] = r
 											}
-										: {})}
-									loading={status === 'loading'}
-									onClick={() => {
-										status === 'done'
-											? 1
-											: useFFmpegStore.getState().transcode({
-													index,
-													ext: selectedExts.current[index] || exts[0]!,
-												})
-									}}
-								>
-									{status === 'idle'
-										? 'Start'
-										: status === 'loading'
-											? 'Processing'
-											: 'done'}
-								</Button>
+										}}
+										w="8rem"
+										color="green"
+										component="a"
+										href={item.outputURL}
+									>
+										Download
+									</Button>
+								) : (
+									<Button
+										w="8rem"
+										color="red"
+										loading={status === 'loading'}
+										onClick={() => {
+											useFFmpegStore.getState().transcode({
+												index,
+												ext: selectedExts.current[index],
+											})
+										}}
+									>
+										{status === 'idle' ? 'Start' : 'Download'}
+									</Button>
+								)}
 							</Table.Td>
 						</Table.Tr>
 					)

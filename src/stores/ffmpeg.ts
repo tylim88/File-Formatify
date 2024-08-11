@@ -14,12 +14,9 @@ export const useFFmpegStore = persistent<{
 	load: () => void
 	status: 'idle' | 'loading' | 'loaded'
 	message: null | string
-	transcode: (props: { index: number; ext: string }) => void
+	transcode: (props: { index: number; ext: string | undefined }) => void
 	items: ((
-		| {
-				outputURL: string
-				status: 'done'
-		  }
+		| { outputPath: string; outputURL: string; status: 'done' }
 		| { status: 'loading' | 'idle' }
 	) & { inputFile: FileWithPath })[]
 }>(
@@ -65,7 +62,7 @@ export const useFFmpegStore = persistent<{
 		reset: () => {
 			set({ ...initialState, status: get().status })
 		},
-		transcode: async ({ index, ext }) => {
+		transcode: async ({ index, ext = '.mp4' }) => {
 			const { items, status } = get()
 			const item = items[index]
 			if (!item) return
@@ -92,9 +89,10 @@ export const useFFmpegStore = persistent<{
 				set(({ items }) => {
 					items[index] = {
 						...item,
+						outputPath,
 						status: 'done',
 						outputURL: URL.createObjectURL(
-							new Blob([data.buffer], { type: 'video/mp4' })
+							new Blob([data.buffer], { type: `video/${ext.split('.')[1]}` })
 						),
 					}
 				})
