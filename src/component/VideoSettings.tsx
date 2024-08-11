@@ -14,17 +14,17 @@ import { useFFmpegStore } from '@/stores'
 
 export const VideoSettings = ({
 	isOpened,
-	close: onClose,
+	close,
 }: {
 	isOpened: boolean
 	close: () => void
 }) => {
-	const [bitrate, setBitrate] = useState<string | number>(0)
+	const [videoBitrate, setVideoBitrate] = useState<string | number>(0)
 	const [height, setHeight] = useState<string | number>(0)
 	const [width, setWidth] = useState<string | number>(0)
 	const [ext, setExt] = useState<string>(videoExtensions[0]!)
 	return (
-		<Modal title="Settings" opened={isOpened} onClose={onClose} centered>
+		<Modal title="Settings" opened={isOpened} onClose={close} centered>
 			<Stack>
 				<Grid>
 					<Grid.Col span={12}>
@@ -43,8 +43,8 @@ export const VideoSettings = ({
 							label="Bitrate"
 							min={0}
 							description="set to 0 for default"
-							value={bitrate}
-							onChange={setBitrate}
+							value={videoBitrate}
+							onChange={setVideoBitrate}
 						/>
 					</Grid.Col>
 				</Grid>
@@ -80,11 +80,12 @@ export const VideoSettings = ({
 							useFFmpegStore.setState({
 								settings: {
 									ext,
-									bitrate,
+									videoBitrate,
 									height,
 									width,
 								},
 							})
+							close()
 						}}
 					>
 						Save

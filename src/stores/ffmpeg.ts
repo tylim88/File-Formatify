@@ -10,23 +10,22 @@ const initialState = {
 	packageStatus: 'idle' as const,
 	message: null,
 	items: [],
-	settings: { ext: videoExtensions[0]!, height: 0, width: 0, bitrate: 0 },
+	settings: { ext: videoExtensions[0]!, height: 0, width: 0, videoBitrate: 0 },
+	selectedUUIDs: [],
 }
 const ffmpeg = new FFmpeg()
 export const useFFmpegStore = persistent<{
+	selectedUUIDs: string[]
 	load: () => void
-	downloadSelected: (selectedUUIDs: string[]) => void
+	downloadSelected: () => void
 	packageStatus: 'idle' | 'loading' | 'loaded'
 	message: null | string
-	convertSelected: (props: {
-		autoDownload: boolean
-		selectedUUIDs: string[]
-	}) => void
+	convertSelected: (props: { autoDownload: boolean }) => void
 	settings: {
 		ext: string
 		height: number | string
 		width: number | string
-		bitrate: number | string
+		videoBitrate: number | string
 	}
 	items: ((
 		| {
@@ -70,6 +69,7 @@ export const useFFmpegStore = persistent<{
 					? 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm'
 					: 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm'
 				ffmpeg.on('log', ({ message }) => {
+					console.log({ message })
 					set({ message })
 				})
 				// toBlobURL is used to bypass CORS issue, urls with the same
@@ -98,13 +98,14 @@ export const useFFmpegStore = persistent<{
 			reset: () => {
 				set({ ...initialState, packageStatus: get().packageStatus })
 			},
-			convertSelected: async ({ autoDownload, selectedUUIDs }) => {
-				clearDownload(selectedUUIDs)
+			convertSelected: async ({ autoDownload }) => {
 				const {
 					items,
 					packageStatus: status,
-					settings: { ext },
+					settings: { ext, videoBitrate, width, height },
+					selectedUUIDs,
 				} = get()
+				clearDownload(selectedUUIDs)
 				set({ items: items.map(item => ({ ...item, status: 'processing' })) })
 
 				while (status !== 'loaded') {
@@ -124,10 +125,22 @@ export const useFFmpegStore = persistent<{
 					const { name, path: inputPath } = item.inputFile
 					if (!inputPath) return
 					const outputPath = `${name.split('.')[0]}${ext}`
+					const videoBitrateArr =
+						parseInt(`${videoBitrate}`) > 0 ? ['-b:v', `${videoBitrate}`] : []
+					const resolution =
+						parseInt(`${width}`) > 0 || parseInt(`${height}`) > 0
+							? ['-vf', `scale=${width || -1}:${height || -1}`]
+							: []
 					try {
 						const startTime = new Date()
 						await ffmpeg.writeFile(inputPath, await fetchFile(item.inputFile))
-						await ffmpeg.exec(['-i', inputPath, outputPath])
+						await ffmpeg.exec([
+							'-i',
+							inputPath,
+							...videoBitrateArr,
+							...resolution,
+							outputPath,
+						])
 						const fileData = await ffmpeg.readFile(outputPath)
 						const endTime = new Date()
 						const data = new Uint8Array(fileData as ArrayBuffer)
@@ -159,8 +172,8 @@ export const useFFmpegStore = persistent<{
 					}
 				})
 			},
-			downloadSelected: selectedUUIDs => {
-				const { items } = get()
+			downloadSelected: () => {
+				const { items, selectedUUIDs } = get()
 				items.forEach(item => {
 					if (
 						item.status === 'converted' &&
@@ -185,10 +198,14 @@ export const useFFmpegStore = persistent<{
 				})
 			},
 			removeFiles: file_uuids => {
+				const { selectedUUIDs } = get()
 				set({
 					items: get().items.filter(({ uuid }) => {
 						return !file_uuids.includes(uuid)
 					}),
+					selectedUUIDs: selectedUUIDs.filter(
+						item => !selectedUUIDs.includes(item)
+					),
 				})
 				clearDownload(file_uuids)
 			},

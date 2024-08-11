@@ -12,10 +12,11 @@ import { useDisclosure } from '@mantine/hooks'
 
 export const VideoMainControls = () => {
 	const items = useFFmpegStore(state => state.items)
-	const [selectedUUIDs, setSelectedUUIDs] = useState<string[]>([])
+	const selectedUUIDs = useFFmpegStore(state => state.selectedUUIDs)
 	const [autoDownload, setIsAutoDownload] = useState(true)
 	const isNoSelection = selectedUUIDs.length === 0
 	const [isOpened, { open, close }] = useDisclosure(false)
+
 	return (
 		<>
 			<VideoSettings isOpened={isOpened} close={close} />
@@ -36,12 +37,13 @@ export const VideoMainControls = () => {
 						leftSection={<IconPlayerPlay size={14} />}
 						variant="default"
 						disabled={
-							isNoSelection && items.some(item => item.status === 'idle')
+							isNoSelection ||
+							!items.some(
+								item => item.status === 'idle' || item.status === 'converted'
+							)
 						}
 						onClick={() => {
-							useFFmpegStore
-								.getState()
-								.convertSelected({ autoDownload, selectedUUIDs })
+							useFFmpegStore.getState().convertSelected({ autoDownload })
 						}}
 					>
 						Convert
@@ -52,12 +54,10 @@ export const VideoMainControls = () => {
 						w="8rem"
 						leftSection={<IconDownload size={14} />}
 						disabled={
-							isNoSelection || items.some(item => item.status !== 'converted')
+							isNoSelection || !items.some(item => item.status === 'converted')
 						}
 						variant="default"
-						onClick={() =>
-							useFFmpegStore.getState().downloadSelected(selectedUUIDs)
-						}
+						onClick={() => useFFmpegStore.getState().downloadSelected()}
 					>
 						<Text>Download</Text>
 					</Button>
@@ -70,12 +70,6 @@ export const VideoMainControls = () => {
 						variant="default"
 						onClick={() => {
 							useFFmpegStore.getState().removeFiles(selectedUUIDs)
-							setSelectedUUIDs(state => {
-								const newArr = state.filter(
-									item => !selectedUUIDs.includes(item)
-								)
-								return newArr
-							})
 						}}
 					>
 						Delete

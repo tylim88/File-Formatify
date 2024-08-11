@@ -8,12 +8,12 @@ import {
 } from '@mantine/core'
 import { useFFmpegStore } from '@/stores'
 import byteSize from 'byte-size'
-import { useState } from 'react'
 import { IconTrashX } from '@tabler/icons-react'
+import prettyMilliseconds from 'pretty-ms'
 
 export const VideoList = () => {
 	const items = useFFmpegStore(state => state.items)
-	const [selectedUUIDs, setSelectedUUIDs] = useState<string[]>([])
+	const selectedUUIDs = useFFmpegStore(state => state.selectedUUIDs)
 	return (
 		<Table>
 			<Table.Thead>
@@ -24,11 +24,11 @@ export const VideoList = () => {
 							aria-label="Select row"
 							checked={selectedUUIDs.length === items.length}
 							onChange={event =>
-								setSelectedUUIDs(
-									event.currentTarget.checked
+								useFFmpegStore.setState({
+									selectedUUIDs: event.currentTarget.checked
 										? items.map(({ uuid }) => uuid)
-										: []
-								)
+										: [],
+								})
 							}
 						/>
 					</Table.Th>
@@ -54,11 +54,6 @@ export const VideoList = () => {
 									variant="transparent"
 									onClick={() => {
 										useFFmpegStore.getState().removeFiles([uuid])
-										setSelectedUUIDs(state => {
-											const newArr = state.filter(item => item !== uuid)
-
-											return newArr
-										})
 									}}
 								>
 									<IconTrashX size={16} />
@@ -69,16 +64,22 @@ export const VideoList = () => {
 									aria-label="Select row"
 									checked={selectedUUIDs.includes(uuid)}
 									onChange={event =>
-										setSelectedUUIDs(
-											event.currentTarget.checked
+										useFFmpegStore.setState({
+											selectedUUIDs: event.currentTarget.checked
 												? [...selectedUUIDs, uuid]
-												: selectedUUIDs.filter(item => item !== uuid)
-										)
+												: selectedUUIDs.filter(item => item !== uuid),
+										})
 									}
 								/>
 							</Table.Td>
 							<Table.Td>
-								<Text truncate="start" ta="end" miw="12rem">
+								<Text
+									style={{
+										overflowWrap: 'break-word',
+									}}
+									ta="start"
+									miw="16rem"
+								>
 									{name}
 								</Text>
 							</Table.Td>
@@ -91,7 +92,11 @@ export const VideoList = () => {
 										<Loader size="xs" />
 									</Center>
 								) : (
-									<Text>{status === 'converted' ? item.duration : '-'}</Text>
+									<Text>
+										{status === 'converted'
+											? prettyMilliseconds(item.duration)
+											: '-'}
+									</Text>
 								)}
 							</Table.Td>
 						</Table.Tr>
