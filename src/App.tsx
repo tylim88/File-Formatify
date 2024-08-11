@@ -6,7 +6,7 @@ import { useFFmpegStore } from '@/stores'
 export const App = () => {
 	useEffect(() => {
 		useFFmpegStore.getState().load()
-	})
+	}, [])
 	return (
 		<>
 			<Outlet />

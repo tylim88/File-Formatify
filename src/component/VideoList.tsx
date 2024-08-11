@@ -4,8 +4,11 @@ import {
 	Text,
 	Stack,
 	Checkbox,
-	Group,
 	ActionIcon,
+	Flex,
+	Loader,
+	Center,
+	Grid,
 } from '@mantine/core'
 import { useFFmpegStore } from '@/stores'
 import byteSize from 'byte-size'
@@ -19,54 +22,84 @@ import {
 
 export const VideoList = () => {
 	const items = useFFmpegStore(state => state.items)
-	const status = useFFmpegStore(state => state.conversionStatus)
 	const [selectedUUIDs, setSelectedUUIDs] = useState<string[]>([])
+	const [autoDownload, setIsAutoDownload] = useState(true)
 	const isNoSelection = selectedUUIDs.length === 0
 	return (
 		<Stack>
-			<Group justify="center">
-				<Button leftSection={<IconSettings size={14} />} variant="default">
-					Settings
-				</Button>
-				<Button
-					leftSection={<IconPlayerPlay size={14} />}
-					variant="default"
-					disabled={isNoSelection}
-					loading={status === 'loading'}
-					onClick={() => {
-						useFFmpegStore.getState().transcode()
-					}}
-				>
-					Start
-				</Button>
-				<Button
-					leftSection={<IconDownload size={14} />}
-					disabled={status !== 'done' || isNoSelection}
-					variant="default"
-					onClick={() => {
-						useFFmpegStore.getState().download()
-					}}
-				>
-					Download
-				</Button>
-				<Button
-					leftSection={<IconTrashX size={14} />}
-					disabled={status !== 'done' || isNoSelection}
-					variant="default"
-					onClick={() => {
-						useFFmpegStore.getState().removeFiles(selectedUUIDs)
-						setSelectedUUIDs(state => {
-							const newArr = state.filter(item => !selectedUUIDs.includes(item))
-							return newArr
-						})
-					}}
-				>
-					Delete
-				</Button>
-			</Group>
+			<Grid>
+				<Grid.Col span={6} display="flex" style={{ justifyContent: 'end' }}>
+					<Button
+						w="8rem"
+						leftSection={<IconSettings size={14} />}
+						variant="default"
+					>
+						Settings
+					</Button>
+				</Grid.Col>
+				<Grid.Col span={6} display="flex" style={{ justifyContent: 'start' }}>
+					<Button
+						w="8rem"
+						leftSection={<IconPlayerPlay size={14} />}
+						variant="default"
+						disabled={
+							isNoSelection && items.some(item => item.status === 'idle')
+						}
+						onClick={() => {
+							useFFmpegStore
+								.getState()
+								.convertSelected({ autoDownload, selectedUUIDs })
+						}}
+					>
+						Convert
+					</Button>
+				</Grid.Col>
+				<Grid.Col span={6} display="flex" style={{ justifyContent: 'end' }}>
+					<Button
+						w="8rem"
+						leftSection={<IconDownload size={14} />}
+						disabled={
+							isNoSelection || items.some(item => item.status !== 'converted')
+						}
+						variant="default"
+						onClick={() =>
+							useFFmpegStore.getState().downloadSelected(selectedUUIDs)
+						}
+					>
+						<Text>Download</Text>
+					</Button>
+				</Grid.Col>
+				<Grid.Col span={6} display="flex" style={{ justifyContent: 'start' }}>
+					<Button
+						w="8rem"
+						leftSection={<IconTrashX size={14} />}
+						disabled={isNoSelection}
+						variant="default"
+						onClick={() => {
+							useFFmpegStore.getState().removeFiles(selectedUUIDs)
+							setSelectedUUIDs(state => {
+								const newArr = state.filter(
+									item => !selectedUUIDs.includes(item)
+								)
+								return newArr
+							})
+						}}
+					>
+						Delete
+					</Button>
+				</Grid.Col>
+			</Grid>
+			<Flex justify="center">
+				<Checkbox
+					checked={autoDownload}
+					onChange={event => setIsAutoDownload(event.currentTarget.checked)}
+					label="Automatically download when conversion is complete."
+				/>
+			</Flex>
 			<Table>
 				<Table.Thead>
 					<Table.Tr>
+						<Table.Th />
 						<Table.Th>
 							<Checkbox
 								aria-label="Select row"
@@ -80,8 +113,9 @@ export const VideoList = () => {
 								}
 							/>
 						</Table.Th>
-						<Table.Th>File Name</Table.Th>
+						<Table.Th ta="center">File Name</Table.Th>
 						<Table.Th ta="center">Size</Table.Th>
+						<Table.Th ta="center">Time</Table.Th>
 					</Table.Tr>
 				</Table.Thead>
 				<Table.Tbody>
@@ -89,11 +123,28 @@ export const VideoList = () => {
 						const {
 							inputFile: { name, size },
 							uuid,
+							status,
 						} = item
 
 						const byte = byteSize(size)
 						return (
 							<Table.Tr key={name}>
+								<Table.Td>
+									<ActionIcon
+										color="dark"
+										variant="transparent"
+										onClick={() => {
+											useFFmpegStore.getState().removeFiles([uuid])
+											setSelectedUUIDs(state => {
+												const newArr = state.filter(item => item !== uuid)
+
+												return newArr
+											})
+										}}
+									>
+										<IconTrashX size={16} />
+									</ActionIcon>
+								</Table.Td>
 								<Table.Td>
 									<Checkbox
 										aria-label="Select row"
@@ -116,21 +167,46 @@ export const VideoList = () => {
 									<Text truncate>{byte.value + ' ' + byte.unit}</Text>
 								</Table.Td>
 								<Table.Td>
+									{status === 'processing' ? (
+										<Center>
+											<Loader size="xs" />
+										</Center>
+									) : (
+										<Text>{status === 'converted' ? item.duration : '-'}</Text>
+									)}
+								</Table.Td>
+								{/* <Table.Td>
 									<ActionIcon
-										color="gray"
+										color="green"
+										disabled={['idle', 'processing'].includes(status)}
 										variant="transparent"
 										onClick={() => {
-											useFFmpegStore.getState().removeFiles([uuid])
-											setSelectedUUIDs(state => {
-												const newArr = state.filter(item => item !== uuid)
-
-												return newArr
-											})
+											useFFmpegStore.getState().downloadSelected([uuid])
 										}}
 									>
-										<IconTrashX size={16} />
+										<IconDownload size={16} />
 									</ActionIcon>
 								</Table.Td>
+								<Table.Td>
+									{status === 'processing' ? (
+										<Center>
+											<Loader size="xs" />
+										</Center>
+									) : (
+										<ActionIcon
+											color="blue"
+											variant="transparent"
+											onClick={() => {
+												useFFmpegStore.getState().convertSelected({
+													autoDownload,
+													selectedUUIDs: [uuid],
+												})
+											}}
+										>
+											<IconPlayerPlay size={16} />
+										</ActionIcon>
+									)}
+								</Table.Td> */}
 							</Table.Tr>
 						)
 					})}

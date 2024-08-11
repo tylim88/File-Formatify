@@ -1,5 +1,5 @@
 import { DropzoneButton, FooterSocial, Title, VideoList } from '@/component'
-import { Container, DEFAULT_THEME } from '@mantine/core'
+import { Container } from '@mantine/core'
 import { useFFmpegStore } from '@/stores'
 
 export const Home = () => {
@@ -11,7 +11,12 @@ export const Home = () => {
 		<Container
 			size="sm"
 			display="flex"
-			style={{ flexDirection: 'column', gap: DEFAULT_THEME.spacing.xl }}
+			w="100%"
+			style={{
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}
 			h="100%"
 		>
 			<Title />
