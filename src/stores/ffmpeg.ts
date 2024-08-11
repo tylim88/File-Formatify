@@ -2,23 +2,32 @@ import { persistent } from './utils'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { toBlobURL, fetchFile } from '@ffmpeg/util'
 import { FileWithPath } from '@mantine/dropzone'
+import { videoExtensions } from '@/constants'
+import { v4 } from 'uuid'
 
 const initialState = {
 	isLoading: false,
 	status: 'idle' as const,
 	message: null,
 	items: [],
+	conversionStatus: 'idle' as const,
+	settings: { ext: videoExtensions[0]!, height: 0, width: 0, bitrate: 0 },
 }
 const ffmpeg = new FFmpeg()
 export const useFFmpegStore = persistent<{
+	conversionStatus: 'idle' | 'loading' | 'done'
 	load: () => void
+	download: () => void
 	status: 'idle' | 'loading' | 'loaded'
 	message: null | string
-	transcode: (props: { index: number; ext: string | undefined }) => void
+	transcode: () => void
+	settings: { ext: string; height: number; width: number; bitrate: number }
 	items: ((
 		| { outputPath: string; outputURL: string; status: 'done' }
 		| { status: 'loading' | 'idle' }
-	) & { inputFile: FileWithPath })[]
+	) & { inputFile: FileWithPath; uuid: string })[]
+	addFiles: (file: FileWithPath[]) => void
+	removeFiles: (file_uuids: string[]) => void
 }>(
 	{
 		name: 'ffmpeg',
@@ -62,13 +71,13 @@ export const useFFmpegStore = persistent<{
 		reset: () => {
 			set({ ...initialState, status: get().status })
 		},
-		transcode: async ({ index, ext = '.mp4' }) => {
-			const { items, status } = get()
-			const item = items[index]
-			if (!item) return
-			set(({ items }) => {
-				items[index] = { ...item, status: 'loading' }
-			})
+		transcode: async () => {
+			const {
+				items,
+				status,
+				settings: { ext },
+			} = get()
+			set({ items: items.map(item => ({ ...item, status: 'loading' })) })
 
 			while (status !== 'loaded') {
 				if (get().status === 'loaded') break
@@ -78,30 +87,54 @@ export const useFFmpegStore = persistent<{
 					}, 1000)
 				}).catch(console.error)
 			}
-			const { name, path: inputPath } = item.inputFile
-			if (!inputPath) return
-			const outputPath = `${name.split('.')[0]}${ext}`
-			try {
-				await ffmpeg.writeFile(inputPath, await fetchFile(item.inputFile))
-				await ffmpeg.exec(['-i', inputPath, outputPath])
-				const fileData = await ffmpeg.readFile(outputPath)
-				const data = new Uint8Array(fileData as ArrayBuffer)
-				set(({ items }) => {
-					items[index] = {
-						...item,
-						outputPath,
-						status: 'done',
-						outputURL: URL.createObjectURL(
-							new Blob([data.buffer], { type: `video/${ext.split('.')[1]}` })
-						),
-					}
-				})
-			} catch (e) {
-				console.error(e)
-				set(({ items }) => {
-					items[index] = { ...item, status: 'idle' }
-				})
-			}
+			items.forEach(async (item, index) => {
+				const { name, path: inputPath } = item.inputFile
+				if (!inputPath) return
+				const outputPath = `${name.split('.')[0]}${ext}`
+				try {
+					await ffmpeg.writeFile(inputPath, await fetchFile(item.inputFile))
+					await ffmpeg.exec(['-i', inputPath, outputPath])
+					const fileData = await ffmpeg.readFile(outputPath)
+					const data = new Uint8Array(fileData as ArrayBuffer)
+					set(({ items }) => {
+						items[index] = {
+							...item,
+							outputPath,
+							status: 'done',
+							outputURL: URL.createObjectURL(
+								new Blob([data.buffer], { type: `video/${ext.split('.')[1]}` })
+							),
+						}
+					})
+				} catch (e) {
+					console.error(e)
+					set(({ items }) => {
+						items[index] = { ...item, status: 'idle' }
+					})
+				}
+			})
+		},
+		download: () => {},
+		addFiles: files => {
+			set({
+				items: [
+					...get().items,
+					...files.map(file => {
+						return {
+							status: 'idle' as const,
+							inputFile: file,
+							uuid: v4(),
+						}
+					}),
+				],
+			})
+		},
+		removeFiles: file_uuids => {
+			set({
+				items: get().items.filter(({ uuid }) => {
+					return !file_uuids.includes(uuid)
+				}),
+			})
 		},
 	})
 )

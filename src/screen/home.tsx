@@ -18,7 +18,11 @@ export const Home = () => {
 			<Container
 				maw="100%"
 				display="flex"
-				style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}
+				style={{
+					flexGrow: 1,
+					justifyContent: 'center',
+					alignItems: hasItems ? 'start' : 'center',
+				}}
 			>
 				{hasItems ? <VideoList /> : <DropzoneButton />}
 			</Container>

@@ -10,14 +10,7 @@ export function DropzoneButton() {
 	return (
 		<Dropzone
 			onDrop={files => {
-				useFFmpegStore.setState({
-					items: files.map(file => {
-						return {
-							status: 'idle',
-							inputFile: file,
-						}
-					}),
-				})
+				useFFmpegStore.getState().addFiles(files)
 			}}
 			onReject={files => console.log('rejected files', files)}
 			bg="#EFEEF3"

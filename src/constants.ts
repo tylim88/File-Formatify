@@ -8,3 +8,5 @@ export const videoFormats = [
 	{ mime: 'video/x-msvideo', ext: '.avi' },
 	{ mime: 'video/x-ms-wmv', ext: '.wmv' },
 ] as const
+
+export const videoExtensions = videoFormats.map(({ ext }) => ext)
