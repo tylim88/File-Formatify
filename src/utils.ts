@@ -1,3 +1,4 @@
+// @ts-expect-error this library is too old
 import convertLength from 'convert-css-length'
 
 export const convertCSSLength = convertLength(
