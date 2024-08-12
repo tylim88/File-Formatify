@@ -1,14 +1,10 @@
-import { Title as Title_, Stack, Flex } from '@mantine/core'
+import { Title as Title_, Stack } from '@mantine/core'
 
 export const Title = () => {
 	return (
 		<Stack justify="center" align="center" gap="xs" py="xl">
 			<Title_ order={1}>Video Converter</Title_>
-			<Flex gap="md">
-				<Title_ order={3}>Free!</Title_>
-				<Title_ order={3}>No Artificial Limitations!</Title_>
-				<Title_ order={3}>No Ads!</Title_>
-			</Flex>
+			<Title_ order={3}>Absolutely Free And No Artificial Restrictions!</Title_>
 			<Title_ order={5}>Support .flv .mp4 .mkv .avu .wmv and more!</Title_>
 		</Stack>
 	)

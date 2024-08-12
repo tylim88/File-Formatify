@@ -42,7 +42,7 @@ export const VideoSettings = ({
 							hideControls
 							label="Bitrate"
 							min={0}
-							description="set to 0 for default"
+							description="Set to 0 to keep the original video parameters."
 							value={videoBitrate}
 							onChange={setVideoBitrate}
 						/>
@@ -55,7 +55,7 @@ export const VideoSettings = ({
 							hideControls
 							label="Width"
 							min={0}
-							description="set to 0 for default"
+							description="Set to 0 to keep the original video parameters."
 							value={width}
 							onChange={setWidth}
 						/>
@@ -66,7 +66,7 @@ export const VideoSettings = ({
 							hideControls
 							label="height"
 							min={0}
-							description="set to 0 for default"
+							description="Set to 0 to keep the original video parameters."
 							value={height}
 							onChange={setHeight}
 						/>

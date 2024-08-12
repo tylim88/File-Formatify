@@ -4,12 +4,10 @@ import { IconVideo, IconX, IconUpload } from '@tabler/icons-react'
 import { useFFmpegStore } from '@/stores'
 import { videoMimes } from '@/constants'
 
-export function DropzoneButton() {
+export const VideoDropzone = () => {
 	return (
 		<Dropzone
-			onDrop={files => {
-				useFFmpegStore.getState().addFiles(files)
-			}}
+			onDrop={useFFmpegStore.getState().addFiles}
 			onReject={files => console.log('rejected files', files)}
 			bg="#EFEEF3"
 			style={{ border: 'solid' }}

@@ -1,9 +1,10 @@
 import {
-	DropzoneButton,
+	VideoDropzone,
 	FooterSocial,
 	Title,
 	VideoList,
 	VideoMainControls,
+	VideoDropzoneMini,
 } from '@/component'
 import { Container, Stack } from '@mantine/core'
 import { useFFmpegStore } from '@/stores'
@@ -38,10 +39,11 @@ export const Home = () => {
 				{hasItems ? (
 					<>
 						<VideoMainControls />
+						<VideoDropzoneMini />
 						<VideoList />
 					</>
 				) : (
-					<DropzoneButton />
+					<VideoDropzone />
 				)}
 			</Stack>
 			<FooterSocial />
