@@ -37,10 +37,7 @@ export const VideoMainControls = () => {
 						leftSection={<IconPlayerPlay size={14} />}
 						variant="default"
 						disabled={
-							isNoSelection ||
-							!items.some(
-								item => item.status === 'idle' || item.status === 'converted'
-							)
+							isNoSelection || !items.some(item => item.status !== 'processing')
 						}
 						onClick={() => {
 							useFFmpegStore.getState().convertSelected({ autoDownload })

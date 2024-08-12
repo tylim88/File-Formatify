@@ -95,7 +95,9 @@ export const VideoList = () => {
 									<Text>
 										{status === 'converted'
 											? prettyMilliseconds(item.duration)
-											: '-'}
+											: status === 'error'
+												? 'error'
+												: '-'}
 									</Text>
 								)}
 							</Table.Td>

@@ -194,7 +194,7 @@ export const useFFmpegStore = persistent<{
 					} catch (e) {
 						console.error(e)
 						set(({ items }) => {
-							items[index] = { ...item, status: 'idle' }
+							items[index] = { ...item, status: 'error' }
 						})
 					}
 				})
