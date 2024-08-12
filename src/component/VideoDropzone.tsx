@@ -2,7 +2,7 @@ import { Text, Group, rem } from '@mantine/core'
 import { Dropzone } from '@mantine/dropzone'
 import { IconVideo, IconX, IconUpload } from '@tabler/icons-react'
 import { useFFmpegStore } from '@/stores'
-import { videoMimes } from '@/constants'
+import { videosTypes } from '@/constants'
 
 export const VideoDropzone = () => {
 	return (
@@ -11,7 +11,7 @@ export const VideoDropzone = () => {
 			onReject={files => console.log('rejected files', files)}
 			bg="#EFEEF3"
 			style={{ border: 'solid' }}
-			accept={videoMimes}
+			accept={videosTypes}
 		>
 			<Group
 				justify="center"

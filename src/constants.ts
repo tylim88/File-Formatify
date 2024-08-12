@@ -25,3 +25,5 @@ export const videoFormats = [
 
 export const videoExtensions = videoFormats.map(({ ext }) => ext)
 export const videoMimes = videoFormats.map(({ mime }) => mime)
+
+export const videosTypes = [...videoExtensions, ...videoMimes]
