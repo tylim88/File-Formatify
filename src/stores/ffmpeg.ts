@@ -42,7 +42,7 @@ export const useFFmpegStore = persistent<{
 				link: HTMLAnchorElement
 				duration: number
 		  }
-		| { status: 'processing' | 'idle' }
+		| { status: 'processing' | 'idle' | 'error' }
 	) & { inputFile: FileWithPath; uuid: string })[]
 	addFiles: (file: FileWithPath[]) => void
 	removeFiles: (file_uuids: string[]) => void
@@ -149,6 +149,22 @@ export const useFFmpegStore = persistent<{
 							...videoBitrateArr,
 							...audioBitrateArr,
 							...resolution,
+							...(ext === '.webm'
+								? [
+										'-fflags',
+										'+genpts',
+										'-preset',
+										'ultrafast',
+										'-c:v',
+										'libvpx',
+										'-c:a',
+										'libvorbis',
+										'-crf',
+										'23',
+										'-threads',
+										'0',
+									]
+								: []),
 							outputPath,
 						])
 						const fileData = await ffmpeg.readFile(outputPath)
@@ -194,17 +210,17 @@ export const useFFmpegStore = persistent<{
 				})
 			},
 			addFiles: files => {
+				const { items, selectedUUIDs } = get()
+				const newItems = files.map(file => {
+					return {
+						status: 'idle' as const,
+						inputFile: file,
+						uuid: v4(),
+					}
+				})
 				set({
-					items: [
-						...get().items,
-						...files.map(file => {
-							return {
-								status: 'idle' as const,
-								inputFile: file,
-								uuid: v4(),
-							}
-						}),
-					],
+					selectedUUIDs: [...selectedUUIDs, ...newItems.map(item => item.uuid)],
+					items: [...items, ...newItems],
 				})
 			},
 			removeFiles: file_uuids => {

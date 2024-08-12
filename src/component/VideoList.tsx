@@ -10,7 +10,6 @@ import { useFFmpegStore } from '@/stores'
 import byteSize from 'byte-size'
 import { IconTrashX } from '@tabler/icons-react'
 import prettyMilliseconds from 'pretty-ms'
-import { Dropzone } from '@mantine/dropzone'
 
 export const VideoList = () => {
 	const items = useFFmpegStore(state => state.items)
