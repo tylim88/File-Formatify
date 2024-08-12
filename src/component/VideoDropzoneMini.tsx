@@ -10,10 +10,10 @@ export const VideoDropzoneMini = () => {
 	return (
 		<Dropzone
 			w="100%"
-			bg="muted"
+			bg="#EFEEF3"
+			style={{ border: 'solid' }}
 			openRef={openRef}
 			onDrop={useFFmpegStore.getState().addFiles}
-			// activateOnClick={false}
 		>
 			<Group justify="center">
 				<Button

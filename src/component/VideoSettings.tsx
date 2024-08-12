@@ -20,6 +20,7 @@ export const VideoSettings = ({
 	close: () => void
 }) => {
 	const [videoBitrate, setVideoBitrate] = useState<string | number>(0)
+	const [audioBitrate, setAudioBitrate] = useState<string | number>(0)
 	const [height, setHeight] = useState<string | number>(0)
 	const [width, setWidth] = useState<string | number>(0)
 	const [ext, setExt] = useState<string>(videoExtensions[0]!)
@@ -36,15 +37,26 @@ export const VideoSettings = ({
 							defaultValue={videoExtensions[0] || null}
 						/>
 					</Grid.Col>
-					<Grid.Col span={12}>
+					<Grid.Col span={6}>
 						<NumberInput
 							decimalScale={0}
 							hideControls
-							label="Bitrate"
+							label="Video Bitrate"
 							min={0}
-							description="Set to 0 to keep the original video parameters."
+							description="Set to 0 to keep the original video parameter."
 							value={videoBitrate}
 							onChange={setVideoBitrate}
+						/>
+					</Grid.Col>
+					<Grid.Col span={6}>
+						<NumberInput
+							decimalScale={0}
+							hideControls
+							label="Audio Bitrate"
+							min={0}
+							description="Set to 0 to keep the original video parameter."
+							value={audioBitrate}
+							onChange={setAudioBitrate}
 						/>
 					</Grid.Col>
 				</Grid>
@@ -55,7 +67,7 @@ export const VideoSettings = ({
 							hideControls
 							label="Width"
 							min={0}
-							description="Set to 0 to keep the original video parameters."
+							description="Set to 0 to keep the original video parameter."
 							value={width}
 							onChange={setWidth}
 						/>
@@ -66,7 +78,7 @@ export const VideoSettings = ({
 							hideControls
 							label="height"
 							min={0}
-							description="Set to 0 to keep the original video parameters."
+							description="Set to 0 to keep the original video parameter."
 							value={height}
 							onChange={setHeight}
 						/>
@@ -81,6 +93,7 @@ export const VideoSettings = ({
 								settings: {
 									ext,
 									videoBitrate,
+									audioBitrate,
 									height,
 									width,
 								},

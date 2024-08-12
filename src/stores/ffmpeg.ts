@@ -10,7 +10,13 @@ const initialState = {
 	packageStatus: 'idle' as const,
 	message: null,
 	items: [],
-	settings: { ext: videoExtensions[0]!, height: 0, width: 0, videoBitrate: 0 },
+	settings: {
+		ext: videoExtensions[0]!,
+		height: 0,
+		width: 0,
+		videoBitrate: 0,
+		audioBitrate: 0,
+	},
 	selectedUUIDs: [],
 }
 const ffmpeg = new FFmpeg()
@@ -26,6 +32,7 @@ export const useFFmpegStore = persistent<{
 		height: number | string
 		width: number | string
 		videoBitrate: number | string
+		audioBitrate: number | string
 	}
 	items: ((
 		| {
@@ -102,7 +109,7 @@ export const useFFmpegStore = persistent<{
 				const {
 					items,
 					packageStatus: status,
-					settings: { ext, videoBitrate, width, height },
+					settings: { ext, videoBitrate, audioBitrate, width, height },
 					selectedUUIDs,
 				} = get()
 				clearDownload(selectedUUIDs)
@@ -127,6 +134,8 @@ export const useFFmpegStore = persistent<{
 					const outputPath = `${name.split('.')[0]}${ext}`
 					const videoBitrateArr =
 						parseInt(`${videoBitrate}`) > 0 ? ['-b:v', `${videoBitrate}`] : []
+					const audioBitrateArr =
+						parseInt(`${audioBitrate}`) > 0 ? ['-b:a', `${videoBitrate}`] : []
 					const resolution =
 						parseInt(`${width}`) > 0 || parseInt(`${height}`) > 0
 							? ['-vf', `scale=${width || -1}:${height || -1}`]
@@ -138,6 +147,7 @@ export const useFFmpegStore = persistent<{
 							'-i',
 							inputPath,
 							...videoBitrateArr,
+							...audioBitrateArr,
 							...resolution,
 							outputPath,
 						])
