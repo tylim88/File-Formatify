@@ -59,7 +59,6 @@ const points = [
 
 export const Home = () => {
 	const items = useFFmpegStore(state => state.items)
-
 	const hasItems = items.length > 0
 
 	return (

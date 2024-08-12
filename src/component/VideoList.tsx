@@ -47,7 +47,7 @@ export const VideoList = () => {
 
 					const byte = byteSize(size)
 					return (
-						<Table.Tr key={name}>
+						<Table.Tr key={uuid}>
 							<Table.Td>
 								<ActionIcon
 									color="dark"
