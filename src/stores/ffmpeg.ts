@@ -4,6 +4,7 @@ import { toBlobURL, fetchFile } from '@ffmpeg/util'
 import { FileWithPath } from '@mantine/dropzone'
 import { videoExtensions } from '@/constants'
 import { v4 } from 'uuid'
+import { download, isChromium } from '@/utils'
 
 const initialState = {
 	isLoading: false,
@@ -186,7 +187,7 @@ export const useFFmpegStore = persistent<{
 									// @ts-expect-error 123
 									duration: endTime - startTime,
 									// @ts-expect-error 123
-									link: download({ outputPath, outputURL }),
+									link: download({ outputPath, href: outputURL }),
 								}
 							})
 						}
@@ -205,7 +206,7 @@ export const useFFmpegStore = persistent<{
 						item.status === 'converted' &&
 						selectedUUIDs.includes(item.uuid)
 					) {
-						download({ ...item })
+						download({ ...item, href: item.outputURL })
 					}
 				})
 			},
@@ -238,27 +239,3 @@ export const useFFmpegStore = persistent<{
 		}
 	}
 )
-const isChromium = () => {
-	const ua = navigator.userAgent
-	const isChromium = ua.includes('Chrome') || ua.includes('Chromium')
-	const isEdge = ua.includes('Edg')
-	const isOpera = ua.includes('OPR')
-	const isBrave = ua.includes('Brave')
-
-	return isChromium && !isEdge && !isOpera && !isBrave
-}
-
-const download = ({
-	outputURL,
-	outputPath,
-}: {
-	outputURL: string
-	outputPath: string
-}) => {
-	const link = document.createElement('a')
-	link.href = outputURL
-	link.setAttribute('download', outputPath)
-	document.body.appendChild(link)
-	link.click()
-	return link
-}

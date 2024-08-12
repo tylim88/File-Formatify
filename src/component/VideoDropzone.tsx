@@ -51,10 +51,10 @@ export const VideoDropzone = () => {
 
 				<div>
 					<Text size="xl" inline>
-						Drag videos here or click to select files
+						Drag files here or click to select files
 					</Text>
 					<Text size="sm" c="dimmed" inline mt={7}>
-						Attach as many files as you like, no size limitation!
+						Attach as many files as you like, no size or number restrictions!
 					</Text>
 				</div>
 			</Group>

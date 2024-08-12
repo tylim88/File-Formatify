@@ -1,4 +1,4 @@
-import { Button, Text, Checkbox, Flex, Grid } from '@mantine/core'
+import { Button, Text, Checkbox, Grid } from '@mantine/core'
 import { useFFmpegStore } from '@/stores'
 import { useState } from 'react'
 import {
@@ -9,7 +9,7 @@ import {
 } from '@tabler/icons-react'
 import { VideoSettings } from './VideoSettings'
 import { useDisclosure } from '@mantine/hooks'
-
+import { isChromium } from '@/utils'
 export const VideoMainControls = () => {
 	const items = useFFmpegStore(state => state.items)
 	const selectedUUIDs = useFFmpegStore(state => state.selectedUUIDs)
@@ -76,13 +76,16 @@ export const VideoMainControls = () => {
 					</Button>
 				</Grid.Col>
 			</Grid>
-			<Flex justify="center">
-				<Checkbox
-					checked={autoDownload}
-					onChange={event => setIsAutoDownload(event.currentTarget.checked)}
-					label="Automatically download when conversion is complete."
-				/>
-			</Flex>
+			<Checkbox
+				checked={autoDownload}
+				onChange={event => setIsAutoDownload(event.currentTarget.checked)}
+				label="Automatically download when conversion is complete."
+			/>
+			{isChromium() ? (
+				<Text size="xs" fs="italic">
+					For faster conversion, please use Firefox
+				</Text>
+			) : null}
 		</>
 	)
 }
