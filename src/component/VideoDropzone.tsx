@@ -8,8 +8,7 @@ export const VideoDropzone = () => {
 	return (
 		<Dropzone
 			onDrop={useFFmpegStore.getState().addFiles}
-			onReject={files => console.log('rejected files', files)}
-			bg="#EFEEF3"
+			bg={'#EFEEF3'}
 			style={{ border: 'solid' }}
 			accept={videosTypes}
 		>
