@@ -5,6 +5,7 @@ body {
 	margin: 0 auto;
 	text-align: center;
 	height: 100svh;
+	background: linear-gradient(135deg, #8e44ad, #3498db);
 }
 #root {
 	height: 100%;
