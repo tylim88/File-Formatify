@@ -1,3 +1,5 @@
+import '@mantine/core/styles.css' // https://mantine.dev/styles/mantine-styles/#styles-import-order
+import '@mantine/dropzone/styles.css'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { MantineProvider } from '@mantine/core'
@@ -6,9 +8,7 @@ import { RouterProvider } from '@tanstack/react-router'
 import { router } from './routes'
 import { isProduction } from './config'
 import './main.css'
-import '@mantine/core/styles.css'
 import { THEME } from './theme'
-import '@mantine/dropzone/styles.css'
 
 // if ('serviceWorker' in navigator) {
 // 	navigator.serviceWorker.register('./sw.js').catch(error => {
