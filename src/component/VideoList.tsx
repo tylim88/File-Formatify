@@ -8,14 +8,14 @@ import {
 	Stack,
 	Grid,
 } from '@mantine/core'
-import { useFFmpegStore } from '@/stores'
+import { useFFmpegVideoStore } from '@/stores'
 import byteSize from 'byte-size'
 import { IconTrashX } from '@tabler/icons-react'
 import prettyMilliseconds from 'pretty-ms'
 import { useIsSmallestBreakpoint } from '@/hooks'
 export const VideoList = () => {
-	const items = useFFmpegStore(state => state.items)
-	const selectedUUIDs = useFFmpegStore(state => state.selectedUUIDs)
+	const items = useFFmpegVideoStore(state => state.items)
+	const selectedUUIDs = useFFmpegVideoStore(state => state.selectedUUIDs)
 	const isMobile = useIsSmallestBreakpoint()
 
 	return (
@@ -28,7 +28,7 @@ export const VideoList = () => {
 								aria-label="Select row"
 								checked={selectedUUIDs.length === items.length}
 								onChange={event =>
-									useFFmpegStore.setState({
+									useFFmpegVideoStore.setState({
 										selectedUUIDs: event.currentTarget.checked
 											? items.map(({ uuid }) => uuid)
 											: [],
@@ -69,7 +69,7 @@ export const VideoList = () => {
 										aria-label="Select row"
 										checked={selectedUUIDs.includes(uuid)}
 										onChange={event =>
-											useFFmpegStore.setState({
+											useFFmpegVideoStore.setState({
 												selectedUUIDs: event.currentTarget.checked
 													? [...selectedUUIDs, uuid]
 													: selectedUUIDs.filter(item => item !== uuid),
@@ -130,7 +130,7 @@ export const VideoList = () => {
 										color="dark"
 										variant="transparent"
 										onClick={() => {
-											useFFmpegStore.getState().removeFiles([uuid])
+											useFFmpegVideoStore.getState().removeFiles([uuid])
 										}}
 									>
 										<IconTrashX size={16} />

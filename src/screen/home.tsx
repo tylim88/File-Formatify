@@ -8,7 +8,7 @@ import {
 	Points,
 } from '@/component'
 import { Stack } from '@mantine/core'
-import { useFFmpegStore } from '@/stores'
+import { useFFmpegVideoStore } from '@/stores'
 import {
 	IconAdOff,
 	IconPlant,
@@ -59,7 +59,7 @@ const points = [
 ]
 
 export const Home = () => {
-	const items = useFFmpegStore(state => state.items)
+	const items = useFFmpegVideoStore(state => state.items)
 	const hasItems = items.length > 0
 
 	return (
@@ -77,7 +77,7 @@ export const Home = () => {
 					<>
 						<VideoMainControls />
 						<DropzoneMini
-							onDrop={useFFmpegStore.getState().addFiles}
+							onDrop={useFFmpegVideoStore.getState().addFiles}
 							accept={videosTypes}
 						/>
 						<VideoList />
@@ -85,7 +85,7 @@ export const Home = () => {
 				) : (
 					<>
 						<Dropzone
-							onDrop={useFFmpegStore.getState().addFiles}
+							onDrop={useFFmpegVideoStore.getState().addFiles}
 							accept={videosTypes}
 						/>
 						<Points items={points} />
