@@ -3,12 +3,13 @@ import { Dropzone } from '@mantine/dropzone'
 import { IconVideo, IconX, IconUpload } from '@tabler/icons-react'
 import { useFFmpegStore } from '@/stores'
 import { videosTypes } from '@/constants'
+import { textColor } from '@/styles'
 
 export const VideoDropzone = () => {
 	return (
 		<Dropzone
 			onDrop={useFFmpegStore.getState().addFiles}
-			bg={'#EFEEF3'}
+			bg={textColor}
 			style={{ border: 'solid' }}
 			accept={videosTypes}
 		>

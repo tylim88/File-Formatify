@@ -3,6 +3,7 @@ import { Button, Group } from '@mantine/core'
 import { Dropzone } from '@mantine/dropzone'
 import { useFFmpegStore } from '@/stores'
 import { IconPlus } from '@tabler/icons-react'
+import { textColor } from '@/styles'
 
 export const VideoDropzoneMini = () => {
 	const openRef = useRef<() => void>(null)
@@ -10,7 +11,7 @@ export const VideoDropzoneMini = () => {
 	return (
 		<Dropzone
 			w="100%"
-			bg="#EFEEF3"
+			bg={textColor}
 			style={{ border: 'solid' }}
 			openRef={openRef}
 			onDrop={useFFmpegStore.getState().addFiles}

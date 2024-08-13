@@ -9,7 +9,7 @@ export function FooterSocial() {
 		<Flex gap={0} justify="center" py="xl">
 			<ActionIcon
 				size="lg"
-				color="gray"
+				color="white"
 				variant="subtle"
 				component="a"
 				href="https://github.com/tylim88/File-Formatify"

@@ -1,6 +1,7 @@
 import { TablerIconsProps } from '@tabler/icons-react'
 import { Text, Title, Grid } from '@mantine/core'
 import { useIsSmallestBreakpoint } from '@/hooks'
+import { textColor } from '@/styles'
 
 export const Points = ({
 	items,
@@ -23,7 +24,7 @@ export const Points = ({
 						span={span}
 						style={{ alignItems: 'start', flexDirection: 'column' }}
 					>
-						<Icon size={24} />
+						<Icon size={24} color={textColor} />
 						<Title order={4} ta="start">
 							{title}
 						</Title>

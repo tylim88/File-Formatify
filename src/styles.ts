@@ -17,3 +17,5 @@ export const content = {
 	...glass,
 	borderRadius: DEFAULT_THEME.radius.md,
 } as const
+
+export const textColor = '#EFEEF3'

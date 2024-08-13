@@ -4,9 +4,11 @@ body {
 	width: 100%;
 	margin: 0 auto;
 	text-align: center;
-	height: 100svh;
+	height: 100dvh;
 	background: linear-gradient(135deg, #8e44ad, #3498db);
+	background-attachment: fixed;
 }
+
 #root {
 	height: 100%;
 }
