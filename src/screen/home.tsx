@@ -4,7 +4,7 @@ import {
 	Title,
 	VideoList,
 	VideoMainControls,
-	VideoDropzoneMini,
+	DropzoneMini,
 	Points,
 } from '@/component'
 import { Stack } from '@mantine/core'
@@ -76,7 +76,10 @@ export const Home = () => {
 				{hasItems ? (
 					<>
 						<VideoMainControls />
-						<VideoDropzoneMini />
+						<DropzoneMini
+							onDrop={useFFmpegStore.getState().addFiles}
+							accept={videosTypes}
+						/>
 						<VideoList />
 					</>
 				) : (
