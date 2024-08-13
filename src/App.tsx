@@ -1,4 +1,4 @@
-import { Loader } from '@mantine/core'
+import { Loader, Container } from '@mantine/core'
 import { Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from './component'
 import { Suspense, useEffect } from 'react'
@@ -8,11 +8,11 @@ export const App = () => {
 		useFFmpegStore.getState().load()
 	}, [])
 	return (
-		<>
+		<Container h="100%">
 			<Outlet />
 			<Suspense fallback={<Loader />}>
 				<TanStackRouterDevtools />
 			</Suspense>
-		</>
+		</Container>
 	)
 }

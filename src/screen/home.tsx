@@ -7,7 +7,7 @@ import {
 	VideoDropzoneMini,
 	Points,
 } from '@/component'
-import { Container, Stack } from '@mantine/core'
+import { Stack } from '@mantine/core'
 import { useFFmpegStore } from '@/stores'
 import {
 	IconAdOff,
@@ -62,30 +62,22 @@ export const Home = () => {
 	const hasItems = items.length > 0
 
 	return (
-		<Container
-			size="sm"
-			display="flex"
-			style={{
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}
-			h="100%"
-		>
+		<Stack gap={0} align="center" h="100%" px={0}>
 			<Title />
 			<Stack
-				gap="xl"
+				gap="xs"
+				align="center"
 				justify={hasItems ? 'start' : 'center'}
 				style={{
 					flexGrow: 1,
 				}}
 			>
 				{hasItems ? (
-					<Stack align="center">
+					<>
 						<VideoMainControls />
 						<VideoDropzoneMini />
 						<VideoList />
-					</Stack>
+					</>
 				) : (
 					<>
 						<VideoDropzone />
@@ -94,6 +86,6 @@ export const Home = () => {
 				)}
 			</Stack>
 			<FooterSocial />
-		</Container>
+		</Stack>
 	)
 }
