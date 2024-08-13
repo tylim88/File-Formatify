@@ -13,7 +13,7 @@ export const Points = ({
 }) => {
 	const span = useIsSmallestBreakpoint() ? 12 : 6
 	return (
-		<Grid>
+		<Grid py="xl">
 			{items.map(({ Icon, text, title }) => {
 				return (
 					<Grid.Col

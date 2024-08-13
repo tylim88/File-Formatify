@@ -6,3 +6,6 @@ body {
 	text-align: center;
 	height: 100svh;
 }
+#root {
+	height: 100%;
+}

@@ -62,12 +62,12 @@ export const Home = () => {
 	const hasItems = items.length > 0
 
 	return (
-		<Stack gap={0} align="center" h="100%" px={0}>
+		<Stack gap={0} align="center" justify="start" h="100%" px={0}>
 			<Title />
 			<Stack
-				gap="xs"
+				gap="sm"
 				align="center"
-				justify={hasItems ? 'start' : 'center'}
+				justify={'start'}
 				style={{
 					flexGrow: 1,
 				}}
