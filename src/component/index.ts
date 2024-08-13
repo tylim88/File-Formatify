@@ -1,6 +1,6 @@
 export * from './TanStackRouterDevtools'
 export * from './Link'
-export * from './VideoDropzone'
+export * from './Dropzone'
 export * from './FooterSocial'
 export * from './Title'
 export * from './VideoList'

@@ -1,5 +1,5 @@
 import {
-	VideoDropzone,
+	Dropzone,
 	FooterSocial,
 	Title,
 	VideoList,
@@ -18,6 +18,7 @@ import {
 	IconFileDelta,
 	IconSettingsStar,
 } from '@tabler/icons-react'
+import { videosTypes } from '@/constants'
 
 const points = [
 	{
@@ -80,7 +81,10 @@ export const Home = () => {
 					</>
 				) : (
 					<>
-						<VideoDropzone />
+						<Dropzone
+							onDrop={useFFmpegStore.getState().addFiles}
+							accept={videosTypes}
+						/>
 						<Points items={points} />
 					</>
 				)}
