@@ -1,5 +1,5 @@
 import { Button, Text, Checkbox, Grid } from '@mantine/core'
-import { useFFmpegStore } from '@/stores'
+import { useFFmpegVideoStore } from '@/stores'
 import { useState } from 'react'
 import {
 	IconPlayerPlay,
@@ -10,9 +10,10 @@ import {
 import { VideoSettings } from './VideoSettings'
 import { useDisclosure } from '@mantine/hooks'
 import { isChromium } from '@/utils'
+
 export const VideoMainControls = () => {
-	const items = useFFmpegStore(state => state.items)
-	const selectedUUIDs = useFFmpegStore(state => state.selectedUUIDs)
+	const items = useFFmpegVideoStore(state => state.items)
+	const selectedUUIDs = useFFmpegVideoStore(state => state.selectedUUIDs)
 	const [autoDownload, setIsAutoDownload] = useState(true)
 	const isNoSelection = selectedUUIDs.length === 0
 	const [isOpened, { open, close }] = useDisclosure(false)
@@ -40,7 +41,7 @@ export const VideoMainControls = () => {
 							isNoSelection || !items.some(item => item.status !== 'processing')
 						}
 						onClick={() => {
-							useFFmpegStore.getState().convertSelected({ autoDownload })
+							useFFmpegVideoStore.getState().convertSelected({ autoDownload })
 						}}
 					>
 						Convert
@@ -54,7 +55,7 @@ export const VideoMainControls = () => {
 							isNoSelection || !items.some(item => item.status === 'converted')
 						}
 						variant="default"
-						onClick={() => useFFmpegStore.getState().downloadSelected()}
+						onClick={() => useFFmpegVideoStore.getState().downloadSelected()}
 					>
 						<Text>Download</Text>
 					</Button>
@@ -66,7 +67,7 @@ export const VideoMainControls = () => {
 						disabled={isNoSelection}
 						variant="default"
 						onClick={() => {
-							useFFmpegStore.getState().removeFiles(selectedUUIDs)
+							useFFmpegVideoStore.getState().removeFiles(selectedUUIDs)
 						}}
 					>
 						Delete

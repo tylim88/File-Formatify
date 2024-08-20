@@ -7,15 +7,16 @@ import {
 	Center,
 	Stack,
 	Grid,
+	Flex,
 } from '@mantine/core'
-import { useFFmpegStore } from '@/stores'
+import { useFFmpegVideoStore } from '@/stores'
 import byteSize from 'byte-size'
 import { IconTrashX } from '@tabler/icons-react'
 import prettyMilliseconds from 'pretty-ms'
 import { useIsSmallestBreakpoint } from '@/hooks'
 export const VideoList = () => {
-	const items = useFFmpegStore(state => state.items)
-	const selectedUUIDs = useFFmpegStore(state => state.selectedUUIDs)
+	const items = useFFmpegVideoStore(state => state.items)
+	const selectedUUIDs = useFFmpegVideoStore(state => state.selectedUUIDs)
 	const isMobile = useIsSmallestBreakpoint()
 
 	return (
@@ -28,7 +29,7 @@ export const VideoList = () => {
 								aria-label="Select row"
 								checked={selectedUUIDs.length === items.length}
 								onChange={event =>
-									useFFmpegStore.setState({
+									useFFmpegVideoStore.setState({
 										selectedUUIDs: event.currentTarget.checked
 											? items.map(({ uuid }) => uuid)
 											: [],
@@ -69,7 +70,7 @@ export const VideoList = () => {
 										aria-label="Select row"
 										checked={selectedUUIDs.includes(uuid)}
 										onChange={event =>
-											useFFmpegStore.setState({
+											useFFmpegVideoStore.setState({
 												selectedUUIDs: event.currentTarget.checked
 													? [...selectedUUIDs, uuid]
 													: selectedUUIDs.filter(item => item !== uuid),
@@ -97,11 +98,13 @@ export const VideoList = () => {
 												</Grid.Col>
 												<Grid.Col span={6}>
 													{status === 'processing' ? (
-														<Center h="100%" w="100%">
-															<Loader size="xs" />
-														</Center>
+														<Flex h="100%" w="100%" justify="end">
+															<Loader size="xs" color="white" />
+														</Flex>
 													) : (
-														<Text>{time}</Text>
+														<Text ta="right" fw="bold" size="sm">
+															{time}
+														</Text>
 													)}
 												</Grid.Col>
 											</Grid>
@@ -114,9 +117,9 @@ export const VideoList = () => {
 											<Text truncate>{sizeText}</Text>
 										</Table.Td>
 										<Table.Td>
-											{status === 'processing' ? (
+											{status !== 'processing' ? (
 												<Center>
-													<Loader size="xs" />
+													<Loader size="xs" color="white" />
 												</Center>
 											) : (
 												<Text>{time}</Text>
@@ -130,7 +133,7 @@ export const VideoList = () => {
 										color="dark"
 										variant="transparent"
 										onClick={() => {
-											useFFmpegStore.getState().removeFiles([uuid])
+											useFFmpegVideoStore.getState().removeFiles([uuid])
 										}}
 									>
 										<IconTrashX size={16} />

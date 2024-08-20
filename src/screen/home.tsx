@@ -1,14 +1,14 @@
 import {
-	VideoDropzone,
+	Dropzone,
 	FooterSocial,
 	Title,
 	VideoList,
 	VideoMainControls,
-	VideoDropzoneMini,
+	DropzoneMini,
 	Points,
 } from '@/component'
 import { Stack } from '@mantine/core'
-import { useFFmpegStore } from '@/stores'
+import { useFFmpegVideoStore } from '@/stores'
 import {
 	IconAdOff,
 	IconPlant,
@@ -18,6 +18,7 @@ import {
 	IconFileDelta,
 	IconSettingsStar,
 } from '@tabler/icons-react'
+import { videosTypes } from '@/constants'
 
 const points = [
 	{
@@ -58,7 +59,7 @@ const points = [
 ]
 
 export const Home = () => {
-	const items = useFFmpegStore(state => state.items)
+	const items = useFFmpegVideoStore(state => state.items)
 	const hasItems = items.length > 0
 
 	return (
@@ -75,12 +76,18 @@ export const Home = () => {
 				{hasItems ? (
 					<>
 						<VideoMainControls />
-						<VideoDropzoneMini />
+						<DropzoneMini
+							onDrop={useFFmpegVideoStore.getState().addFiles}
+							accept={videosTypes}
+						/>
 						<VideoList />
 					</>
 				) : (
 					<>
-						<VideoDropzone />
+						<Dropzone
+							onDrop={useFFmpegVideoStore.getState().addFiles}
+							accept={videosTypes}
+						/>
 						<Points items={points} />
 					</>
 				)}

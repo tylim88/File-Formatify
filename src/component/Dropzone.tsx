@@ -1,17 +1,21 @@
 import { Text, Group, rem } from '@mantine/core'
-import { Dropzone } from '@mantine/dropzone'
+import { Dropzone as Dropzone_, FileWithPath } from '@mantine/dropzone'
 import { IconVideo, IconX, IconUpload } from '@tabler/icons-react'
-import { useFFmpegStore } from '@/stores'
-import { videosTypes } from '@/constants'
 import { textColor } from '@/styles'
 
-export const VideoDropzone = () => {
+export const Dropzone = ({
+	onDrop,
+	accept,
+}: {
+	onDrop: (files: FileWithPath[]) => void
+	accept: string[]
+}) => {
 	return (
-		<Dropzone
-			onDrop={useFFmpegStore.getState().addFiles}
+		<Dropzone_
+			onDrop={onDrop}
 			bg={textColor}
 			style={{ border: 'solid' }}
-			accept={videosTypes}
+			accept={accept}
 		>
 			<Group
 				justify="center"
@@ -19,7 +23,7 @@ export const VideoDropzone = () => {
 				mih={220}
 				style={{ pointerEvents: 'none' }}
 			>
-				<Dropzone.Accept>
+				<Dropzone_.Accept>
 					<IconUpload
 						style={{
 							width: rem(52),
@@ -28,8 +32,8 @@ export const VideoDropzone = () => {
 						}}
 						stroke={1.5}
 					/>
-				</Dropzone.Accept>
-				<Dropzone.Reject>
+				</Dropzone_.Accept>
+				<Dropzone_.Reject>
 					<IconX
 						style={{
 							width: rem(52),
@@ -38,8 +42,8 @@ export const VideoDropzone = () => {
 						}}
 						stroke={1.5}
 					/>
-				</Dropzone.Reject>
-				<Dropzone.Idle>
+				</Dropzone_.Reject>
+				<Dropzone_.Idle>
 					<IconVideo
 						style={{
 							width: rem(52),
@@ -48,7 +52,7 @@ export const VideoDropzone = () => {
 						}}
 						stroke={1.5}
 					/>
-				</Dropzone.Idle>
+				</Dropzone_.Idle>
 
 				<div>
 					<Text size="xl" inline>
@@ -59,6 +63,6 @@ export const VideoDropzone = () => {
 					</Text>
 				</div>
 			</Group>
-		</Dropzone>
+		</Dropzone_>
 	)
 }
