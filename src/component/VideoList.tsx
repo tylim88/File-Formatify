@@ -7,6 +7,7 @@ import {
 	Center,
 	Stack,
 	Grid,
+	Flex,
 } from '@mantine/core'
 import { useFFmpegVideoStore } from '@/stores'
 import byteSize from 'byte-size'
@@ -97,11 +98,13 @@ export const VideoList = () => {
 												</Grid.Col>
 												<Grid.Col span={6}>
 													{status === 'processing' ? (
-														<Center h="100%" w="100%">
-															<Loader size="xs" />
-														</Center>
+														<Flex h="100%" w="100%" justify="end">
+															<Loader size="xs" color="white" />
+														</Flex>
 													) : (
-														<Text>{time}</Text>
+														<Text ta="right" fw="bold" size="sm">
+															{time}
+														</Text>
 													)}
 												</Grid.Col>
 											</Grid>
@@ -114,9 +117,9 @@ export const VideoList = () => {
 											<Text truncate>{sizeText}</Text>
 										</Table.Td>
 										<Table.Td>
-											{status === 'processing' ? (
+											{status !== 'processing' ? (
 												<Center>
-													<Loader size="xs" />
+													<Loader size="xs" color="white" />
 												</Center>
 											) : (
 												<Text>{time}</Text>
