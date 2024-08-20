@@ -185,13 +185,13 @@ export const useFFmpegVideoStore = persistent<{
 				})
 			},
 			removeFiles: file_uuids => {
-				const { selectedUUIDs } = get()
+				const { selectedUUIDs, items } = get()
 				set({
-					items: get().items.filter(({ uuid }) => {
+					items: items.filter(({ uuid }) => {
 						return !file_uuids.includes(uuid)
 					}),
 					selectedUUIDs: selectedUUIDs.filter(
-						item => !selectedUUIDs.includes(item)
+						item => !file_uuids.includes(item)
 					),
 				})
 				clearDownload(file_uuids)
