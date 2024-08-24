@@ -30,6 +30,7 @@ export const VideoSettings = ({
 				<Grid>
 					<Grid.Col span={12}>
 						<Select
+							ta="left"
 							value={ext}
 							onChange={v => setExt(v || videoExtensions[0]!)}
 							label="Output"
@@ -39,6 +40,7 @@ export const VideoSettings = ({
 					</Grid.Col>
 					<Grid.Col span={6}>
 						<NumberInput
+							ta="left"
 							decimalScale={0}
 							hideControls
 							label="Video Bitrate"
@@ -46,10 +48,14 @@ export const VideoSettings = ({
 							description="Set to 0 to keep the original video parameter."
 							value={videoBitrate}
 							onChange={setVideoBitrate}
+							styles={{
+								label: { fontWeight: 'bold' },
+							}}
 						/>
 					</Grid.Col>
 					<Grid.Col span={6}>
 						<NumberInput
+							ta="left"
 							decimalScale={0}
 							hideControls
 							label="Audio Bitrate"
@@ -57,12 +63,16 @@ export const VideoSettings = ({
 							description="Set to 0 to keep the original video parameter."
 							value={audioBitrate}
 							onChange={setAudioBitrate}
+							styles={{
+								label: { fontWeight: 'bold' },
+							}}
 						/>
 					</Grid.Col>
 				</Grid>
 				<Grid>
 					<Grid.Col span={6}>
 						<NumberInput
+							ta="left"
 							decimalScale={0}
 							hideControls
 							label="Width"
@@ -70,10 +80,14 @@ export const VideoSettings = ({
 							description="Set to 0 to keep the original video parameter."
 							value={width}
 							onChange={setWidth}
+							styles={{
+								label: { fontWeight: 'bold' },
+							}}
 						/>
 					</Grid.Col>
 					<Grid.Col span={6}>
 						<NumberInput
+							ta="left"
 							decimalScale={0}
 							hideControls
 							label="height"
@@ -81,6 +95,9 @@ export const VideoSettings = ({
 							description="Set to 0 to keep the original video parameter."
 							value={height}
 							onChange={setHeight}
+							styles={{
+								label: { fontWeight: 'bold' },
+							}}
 						/>
 					</Grid.Col>
 				</Grid>
@@ -108,7 +125,7 @@ export const VideoSettings = ({
 						variant="default"
 						onClick={close}
 					>
-						Exit
+						Cancel
 					</Button>
 				</Flex>
 			</Stack>
