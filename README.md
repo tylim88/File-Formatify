@@ -5,6 +5,8 @@ An absolutely free, client-side-only video converter web app with no artificial 
 setup: `npm run setup`  
 dev: `npm run dev`
 
+[Cloudflare Workers Repo](https://github.com/tylim88/File-Jedi-Workers), more is coming!
+
 ## Motivation
 
 Traditional converters have several disadvantages:
