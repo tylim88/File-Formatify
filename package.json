@@ -51,6 +51,7 @@
 		"@tabler/icons-react": "^2.46.0",
 		"@tanstack/react-router": "^1.8.3",
 		"@tanstack/router-devtools": "^1.8.3",
+		"axios": "^1.7.5",
 		"byte-size": "^9.0.0",
 		"convert-css-length": "^2.0.1",
 		"idb-keyval": "^6.2.1",

@@ -6,8 +6,10 @@ import {
 	IconSettings,
 	IconDownload,
 	IconTrashX,
+	IconMail,
 } from '@tabler/icons-react'
 import { VideoSettings } from './VideoSettings'
+import { FeedBack } from './FeedBack'
 import { useDisclosure } from '@mantine/hooks'
 import { isChromium } from '@/utils'
 
@@ -16,15 +18,18 @@ export const VideoMainControls = () => {
 	const selectedUUIDs = useFFmpegVideoStore(state => state.selectedUUIDs)
 	const [autoDownload, setIsAutoDownload] = useState(true)
 	const isNoSelection = selectedUUIDs.length === 0
-	const [isOpened, { open, close }] = useDisclosure(false)
-
+	const [isSettingsOpened, { open: openSettings, close: closeSettings }] =
+		useDisclosure(false)
+	const [isFeedbackOpened, { open: openFeedback, close: closeFeedback }] =
+		useDisclosure(false)
 	return (
 		<>
-			<VideoSettings isOpened={isOpened} close={close} />
+			<VideoSettings isOpened={isSettingsOpened} close={closeSettings} />
+			<FeedBack isOpened={isFeedbackOpened} close={closeFeedback} />
 			<Grid>
 				<Grid.Col span={6} display="flex" style={{ justifyContent: 'end' }}>
 					<Button
-						onClick={open}
+						onClick={openSettings}
 						w="8rem"
 						leftSection={<IconSettings size={14} />}
 						variant="default"
@@ -71,6 +76,16 @@ export const VideoMainControls = () => {
 						}}
 					>
 						Delete
+					</Button>
+				</Grid.Col>
+				<Grid.Col span={12} display="flex" style={{ justifyContent: 'center' }}>
+					<Button
+						w="8rem"
+						leftSection={<IconMail size={14} />}
+						variant="default"
+						onClick={openFeedback}
+					>
+						Feedback
 					</Button>
 				</Grid.Col>
 			</Grid>
