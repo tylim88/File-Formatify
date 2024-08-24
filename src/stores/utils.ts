@@ -68,7 +68,8 @@ export const persistent = <T extends { [s: string]: unknown }>(
 				name,
 				onRehydrateStorage: state => {
 					// * need delay(minimum delay is enough) because we cannot use `set` immediately after rehydrate
-					// * even if the `set` is successfully called, the data might be empty, this is probably because redux-persist does not work well with idb-keyval. This problem require longer delay to mitigate. This only happen if you reload video chats page, but is ok if you paste video chats link, weird.
+					// * even if the `set` is successfully called, the data might be empty, this is probably because redux-persist does not work well with idb-keyval. This problem require longer delay to mitigate.
+					// * this deduction might be incorrect, need more investigation
 					// TODO solve this permanently
 					setTimeout(() => {
 						state.setHydrated()

@@ -1,6 +1,15 @@
-import { Modal, Grid, Stack, Flex, Button, Textarea, Text } from '@mantine/core'
+import {
+	Modal,
+	Grid,
+	Stack,
+	Flex,
+	Button,
+	Textarea,
+	Text,
+	Divider,
+} from '@mantine/core'
 import { useState } from 'react'
-import { IconX, IconMail } from '@tabler/icons-react'
+import { IconX, IconMail, IconBrandGithub } from '@tabler/icons-react'
 import axios from 'axios'
 import { feedbackURL } from '@/config'
 
@@ -13,18 +22,21 @@ export const FeedBack = ({
 }) => {
 	const [subject, setSubject] = useState('')
 	const [message, setMessage] = useState('')
-	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState(false)
-	const [success, setSuccess] = useState(false)
+	const [status, setStatus] = useState<
+		'idle' | 'loading' | 'error' | 'success'
+	>('idle')
 	return (
 		<Modal
 			title="Feedback"
 			opened={isOpened}
-			onClose={close}
+			onClose={() => {
+				close()
+				setStatus('idle')
+			}}
 			centered
 			size="sm"
 		>
-			<Stack>
+			<Stack gap="xs">
 				<Grid>
 					<Grid.Col span={12}>
 						<Textarea
@@ -58,7 +70,7 @@ export const FeedBack = ({
 						/>
 					</Grid.Col>
 				</Grid>
-				{success ? (
+				{status === 'success' ? (
 					<Flex justify="center" h="1rem">
 						<Text size="md" c="green">
 							Sent!
@@ -68,19 +80,18 @@ export const FeedBack = ({
 					<>
 						<Flex justify="center" h="1rem">
 							<Text size="sm" c="red">
-								{error ? 'something is wrong.' : ''}
+								{status === 'error' ? 'something is wrong.' : ''}
 							</Text>
 						</Flex>
 						<Flex justify="space-evenly">
 							<Button
 								disabled={!subject || !message}
-								loading={loading}
+								loading={status === 'loading'}
 								leftSection={<IconMail size={14} />}
 								variant="default"
-								onClick={async () => {
-									setLoading(true)
-									setError(false)
-									await axios
+								onClick={() => {
+									setStatus('loading')
+									axios
 										.post(
 											feedbackURL,
 											{
@@ -94,21 +105,18 @@ export const FeedBack = ({
 											}
 										)
 										.then(() => {
-											setSuccess(true)
-
+											setStatus('success')
 											setTimeout(() => {
 												close()
 											}, 1000)
-
 											setTimeout(() => {
-												setSuccess(false)
+												setStatus('idle')
 											}, 2000)
 										})
 										.catch(error => {
-											setError(true)
+											setStatus('error')
 											console.error('Error sending data:', error)
 										})
-									setLoading(false)
 								}}
 							>
 								Send
@@ -116,12 +124,22 @@ export const FeedBack = ({
 							<Button
 								leftSection={<IconX size={14} />}
 								variant="default"
-								onClick={() => {
-									setError(false)
-									close()
-								}}
+								onClick={close}
 							>
 								Cancel
+							</Button>
+						</Flex>
+						<Divider my="xs" label="or" labelPosition="center" />
+						<Flex justify="center">
+							<Button
+								component="a"
+								href="https://github.com/tylim88/FileJedi/issues/new/choose"
+								target="_blank"
+								bg="black"
+								leftSection={<IconBrandGithub size={14} />}
+								variant="filled"
+							>
+								Issue
 							</Button>
 						</Flex>
 					</>
