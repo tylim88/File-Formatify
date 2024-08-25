@@ -44,7 +44,7 @@ export const useFFmpegVideoStore = persistent<{
 }>(
 	{
 		name: 'ffmpegVideo',
-		keysToPersist: [],
+		keysToPersist: ['settings'],
 	},
 	(set, get) => {
 		const clearDownload = (uuids: string[]) => {

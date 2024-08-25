@@ -43,8 +43,8 @@ export const useFFmpegAudioStore = persistent<{
 	removeFiles: (file_uuids: string[]) => void
 }>(
 	{
-		name: 'ffmpegVideo',
-		keysToPersist: [],
+		name: 'ffmpegAudio',
+		keysToPersist: ['settings'],
 	},
 	(set, get) => {
 		const clearDownload = (uuids: string[]) => {

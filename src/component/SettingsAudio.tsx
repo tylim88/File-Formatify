@@ -12,7 +12,7 @@ import { useState } from 'react'
 import { IconCheck, IconX } from '@tabler/icons-react'
 import { useFFmpegVideoStore } from '@/stores'
 
-export const VideoSettings = ({
+export const SettingsAudio = ({
 	isOpened,
 	close,
 }: {

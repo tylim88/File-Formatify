@@ -27,8 +27,8 @@ Roadmap:
 2. audio converter
 3. image converter
 
-![homepage](./homepage.png)
-![homepage2](./homepage2.png)
+![homepage](.assets//homepage.png)
+![homepage2](.assets/homepage2.png)
 
 techs:
 

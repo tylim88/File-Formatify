@@ -4,24 +4,31 @@ import { toBlobURL } from '@ffmpeg/util'
 import { isChromium } from '@/utils'
 
 const initialState = {
-	packageStatus: 'idle' as const,
+	packageStatus: 'idle',
 	message: null,
-}
+	mode: 'video',
+} as const
+
 export const ffmpeg = new FFmpeg()
 export const useFFmpegStore = persistent<{
 	load: () => void
 	packageStatus: 'idle' | 'loading' | 'loaded'
 	message: null | string
+	mode: 'video' | 'audio'
+	switchMode: (mode: 'video' | 'audio') => void
 }>(
 	{
-		name: 'ffmpegVideo',
-		keysToPersist: [],
+		name: 'ffmpeg',
+		keysToPersist: ['mode'],
 	},
 	(set, get) => {
 		return {
 			...initialState,
 			reset: () => {
 				set({ ...initialState, packageStatus: get().packageStatus })
+			},
+			switchMode: (mode: 'video' | 'audio') => {
+				set({ mode })
 			},
 			load: async () => {
 				const { packageStatus: status } = get()

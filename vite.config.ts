@@ -4,7 +4,6 @@ import svgr from 'vite-plugin-svgr'
 import { qrcode } from 'vite-plugin-qrcode'
 import mkcert from 'vite-plugin-mkcert'
 import removeConsole from 'vite-plugin-remove-console'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import dynamicImport from 'vite-plugin-dynamic-import'
 import vsharp from 'vite-plugin-vsharp'
@@ -23,30 +22,6 @@ export default defineConfig({
 		mkcert(),
 		vsharp(),
 		removeConsole({ includes: ['log'] }),
-		viteStaticCopy({
-			targets: [
-				{
-					src: '_redirects',
-					dest: '',
-				},
-				{
-					src: 'manifest.json',
-					dest: '',
-				},
-				{
-					src: 'icons',
-					dest: '',
-				},
-				{
-					src: 'audios',
-					dest: '',
-				},
-				{
-					src: 'characters',
-					dest: '',
-				},
-			],
-		}),
 	],
 	optimizeDeps: {
 		exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util'],
