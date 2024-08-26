@@ -7,7 +7,7 @@ import {
 	Flex,
 	Button,
 } from '@mantine/core'
-import { videoExtensions } from '@/constants'
+import { videoExtensions, audioBitrates } from '@/constants'
 import { useState } from 'react'
 import { IconCheck, IconX } from '@tabler/icons-react'
 import { useFFmpegVideoStore } from '@/stores'
@@ -20,7 +20,7 @@ export const SettingsVideo = ({
 	close: () => void
 }) => {
 	const [videoBitrate, setVideoBitrate] = useState<string | number>(0)
-	const [audioBitrate, setAudioBitrate] = useState<string | number>(0)
+	const [audioBitrate, setAudioBitrate] = useState<string>('0')
 	const [height, setHeight] = useState<string | number>(0)
 	const [width, setWidth] = useState<string | number>(0)
 	const [ext, setExt] = useState<string>(videoExtensions[0]!)
@@ -45,7 +45,7 @@ export const SettingsVideo = ({
 							hideControls
 							label="Video Bitrate"
 							min={0}
-							description="Set to 0 to keep the original video parameter."
+							description="Leave it 0 to keep the original video parameter."
 							value={videoBitrate}
 							onChange={setVideoBitrate}
 							styles={{
@@ -54,15 +54,14 @@ export const SettingsVideo = ({
 						/>
 					</Grid.Col>
 					<Grid.Col span={6}>
-						<NumberInput
+						<Select
 							ta="left"
-							decimalScale={0}
-							hideControls
-							label="Audio Bitrate"
-							min={0}
-							description="Set to 0 to keep the original video parameter."
+							description="Leave it 0 to keep the original video parameter."
 							value={audioBitrate}
-							onChange={setAudioBitrate}
+							onChange={v => setAudioBitrate(v || '0')}
+							label="Bitrate (kbps)"
+							data={audioBitrates}
+							defaultValue={'0'}
 							styles={{
 								label: { fontWeight: 'bold' },
 							}}
@@ -77,7 +76,7 @@ export const SettingsVideo = ({
 							hideControls
 							label="Width"
 							min={0}
-							description="Set to 0 to keep the original video parameter."
+							description="Leave it 0 to keep the original video parameter."
 							value={width}
 							onChange={setWidth}
 							styles={{
@@ -92,7 +91,7 @@ export const SettingsVideo = ({
 							hideControls
 							label="height"
 							min={0}
-							description="Set to 0 to keep the original video parameter."
+							description="Leave it 0 to keep the original video parameter."
 							value={height}
 							onChange={setHeight}
 							styles={{

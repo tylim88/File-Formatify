@@ -7,10 +7,15 @@ import {
 	Flex,
 	Button,
 } from '@mantine/core'
-import { videoExtensions } from '@/constants'
+import {
+	audioExtensions,
+	audioSamplingRates,
+	audioBitrates,
+	audioChannels,
+} from '@/constants'
 import { useState } from 'react'
 import { IconCheck, IconX } from '@tabler/icons-react'
-import { useFFmpegVideoStore } from '@/stores'
+import { useFFmpegAudioStore } from '@/stores'
 
 export const SettingsAudio = ({
 	isOpened,
@@ -19,11 +24,11 @@ export const SettingsAudio = ({
 	isOpened: boolean
 	close: () => void
 }) => {
-	const [videoBitrate, setVideoBitrate] = useState<string | number>(0)
-	const [audioBitrate, setAudioBitrate] = useState<string | number>(0)
-	const [height, setHeight] = useState<string | number>(0)
-	const [width, setWidth] = useState<string | number>(0)
-	const [ext, setExt] = useState<string>(videoExtensions[0]!)
+	const [bitrate, setBitrate] = useState<string>('0')
+	const [sampleRate, setSampleRate] = useState<string>('0')
+	const [channel, setChannel] = useState<string>('0')
+	const [volume, setVolume] = useState<string | number>(1)
+	const [ext, setExt] = useState<string>(audioExtensions[0]!)
 	return (
 		<Modal title="Settings" opened={isOpened} onClose={close} centered>
 			<Stack>
@@ -32,37 +37,38 @@ export const SettingsAudio = ({
 						<Select
 							ta="left"
 							value={ext}
-							onChange={v => setExt(v || videoExtensions[0]!)}
+							onChange={v => setExt(v || audioExtensions[0]!)}
 							label="Output"
-							data={videoExtensions}
-							defaultValue={videoExtensions[0] || null}
-						/>
-					</Grid.Col>
-					<Grid.Col span={6}>
-						<NumberInput
-							ta="left"
-							decimalScale={0}
-							hideControls
-							label="Video Bitrate"
-							min={0}
-							description="Set to 0 to keep the original video parameter."
-							value={videoBitrate}
-							onChange={setVideoBitrate}
+							data={audioExtensions}
+							defaultValue={audioExtensions[0] || null}
 							styles={{
 								label: { fontWeight: 'bold' },
 							}}
 						/>
 					</Grid.Col>
 					<Grid.Col span={6}>
-						<NumberInput
+						<Select
 							ta="left"
-							decimalScale={0}
-							hideControls
-							label="Audio Bitrate"
-							min={0}
-							description="Set to 0 to keep the original video parameter."
-							value={audioBitrate}
-							onChange={setAudioBitrate}
+							description="Leave it 0 to keep the original video parameter."
+							value={bitrate}
+							onChange={v => setBitrate(v || audioBitrates[0])}
+							label="Bitrate (kbps)"
+							data={audioBitrates}
+							defaultValue={'0'}
+							styles={{
+								label: { fontWeight: 'bold' },
+							}}
+						/>
+					</Grid.Col>
+					<Grid.Col span={6}>
+						<Select
+							ta="left"
+							description="Leave it 0 to keep the original video parameter."
+							value={sampleRate}
+							onChange={v => setSampleRate(v || audioSamplingRates[0])}
+							label="Sampling Rate (Hz)"
+							data={audioSamplingRates}
+							defaultValue={'0'}
 							styles={{
 								label: { fontWeight: 'bold' },
 							}}
@@ -71,15 +77,14 @@ export const SettingsAudio = ({
 				</Grid>
 				<Grid>
 					<Grid.Col span={6}>
-						<NumberInput
+						<Select
 							ta="left"
-							decimalScale={0}
-							hideControls
-							label="Width"
-							min={0}
-							description="Set to 0 to keep the original video parameter."
-							value={width}
-							onChange={setWidth}
+							description="Leave it 0 to keep the original video parameter."
+							value={channel}
+							onChange={v => setChannel(v || audioChannels[0])}
+							label="Channel"
+							data={audioChannels}
+							defaultValue={'0'}
 							styles={{
 								label: { fontWeight: 'bold' },
 							}}
@@ -88,13 +93,15 @@ export const SettingsAudio = ({
 					<Grid.Col span={6}>
 						<NumberInput
 							ta="left"
-							decimalScale={0}
+							decimalScale={1}
 							hideControls
-							label="height"
+							suffix="x"
+							label="Volume"
 							min={0}
-							description="Set to 0 to keep the original video parameter."
-							value={height}
-							onChange={setHeight}
+							description="Leave it 1x to keep the original video parameter."
+							value={volume}
+							defaultValue={1}
+							onChange={setVolume}
 							styles={{
 								label: { fontWeight: 'bold' },
 							}}
@@ -106,13 +113,13 @@ export const SettingsAudio = ({
 						leftSection={<IconCheck size={14} />}
 						variant="default"
 						onClick={() => {
-							useFFmpegVideoStore.setState({
+							useFFmpegAudioStore.setState({
 								settings: {
 									ext,
-									videoBitrate,
-									audioBitrate,
-									height,
-									width,
+									bitrate,
+									sampleRate,
+									channel,
+									volume,
 								},
 							})
 							close()

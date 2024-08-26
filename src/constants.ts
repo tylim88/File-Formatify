@@ -78,7 +78,7 @@ export const videoPoints = [
 	},
 ]
 
-export const audioFormats = [
+const audioFormats = [
 	{ mime: 'audio/mpeg', ext: '.mp3' },
 	{ mime: 'audio/wav', ext: '.wav' },
 	{ mime: 'audio/flac', ext: '.flac' },
@@ -95,12 +95,33 @@ export const audioFormats = [
 	{ mime: 'audio/amr', ext: '.amr' },
 	{ mime: 'audio/aiff', ext: '.aif' },
 	{ mime: 'audio/x-aac', ext: '.aac' },
+	{ mime: 'audio/3gpp', ext: '.3gp' },
+	{ mime: '', ext: '.mp2' }, // MPEG-2 Audio
+	{ mime: '', ext: '.ac3' }, // Dolby Digital AC-3
+	{ mime: '', ext: '.alac' }, // Apple Lossless Audio Codec
+	{ mime: '', ext: '.dsd' }, // Direct Stream Digital
+	{ mime: '', ext: '.dts' }, // Digital Theater Systems
+	{ mime: '', ext: '.w64' }, // Sony Wave64
+	{ mime: '', ext: '.wv' }, // WavPack
+	{ mime: '', ext: '.tta' }, // True Audio
+	{ mime: '', ext: '.mka' }, // Matroska Audio
+	{ mime: '', ext: '.cda' }, // CD Audio Track
+	{ mime: '', ext: '.gsm' }, // GSM 6.10
+	{ mime: '', ext: '.ra' }, // RealAudio
+	{ mime: '', ext: '.voc' }, // Creative Voice
+	{ mime: '', ext: '.caf' }, // Core Audio Format
+	{ mime: '', ext: '.adts' }, // Audio Data Transport Stream
+	{ mime: '', ext: '.qcp' }, // Qualcomm PureVoice
+	{ mime: '', ext: '.tak' }, // Tom's Audio Kompressor
+	{ mime: '', ext: '.m4b' }, // MPEG-4 Audio Book
+	{ mime: '', ext: '.m4r' }, // MPEG-4 Ringtone
+	{ mime: '', ext: '.ape' }, // Monkey's Audio
 ] as const
 
-export const audioExtensions = audioFormats.map(({ ext }) => ext)
-export const audioMimes = audioFormats.map(({ mime }) => mime)
+export const audioExtensions = [...new Set(audioFormats.map(({ ext }) => ext))]
+export const audioMimes = [...new Set(audioFormats.map(({ mime }) => mime))]
 
-export const audioTypes = [...videoExtensions, ...videoMimes]
+export const audioTypes = [...audioExtensions, ...audioMimes]
 
 export const audioPoints = [
 	{
@@ -139,3 +160,29 @@ export const audioPoints = [
 		text: 'Tailor your conversions to your specific needs. Adjust bitrate, sample rate, and more with easy-to-use settings.',
 	},
 ]
+
+export const audioSamplingRates = [
+	'0',
+	'8000',
+	'11025',
+	'22050',
+	'32000',
+	'44100',
+	'48000',
+	'96000',
+	'192000',
+] as const
+
+export const audioBitrates = [
+	'0',
+	'64',
+	'96',
+	'128',
+	'160',
+	'192',
+	'256',
+	'320',
+	'384',
+] as const
+
+export const audioChannels = ['0', 'mono', 'stereo'] as const

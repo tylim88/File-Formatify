@@ -9,6 +9,7 @@ import {
 	IconMail,
 } from '@tabler/icons-react'
 import { SettingsVideo } from './SettingsVideo'
+import { SettingsAudio } from './SettingsAudio'
 import { FeedBack } from './FeedBack'
 import { useDisclosure } from '@mantine/hooks'
 import { isChromium } from '@/utils'
@@ -26,7 +27,14 @@ export const MainControls = () => {
 		useDisclosure(false)
 	return (
 		<>
-			<SettingsVideo isOpened={isSettingsOpened} close={closeSettings} />
+			<SettingsVideo
+				isOpened={mode === 'video' ? isSettingsOpened : false}
+				close={closeSettings}
+			/>
+			<SettingsAudio
+				isOpened={mode === 'audio' ? isSettingsOpened : false}
+				close={closeSettings}
+			/>
 			<FeedBack isOpened={isFeedbackOpened} close={closeFeedback} />
 			<Grid>
 				<Grid.Col span={6} display="flex" style={{ justifyContent: 'end' }}>

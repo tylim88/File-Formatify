@@ -13,7 +13,7 @@ const initialState = {
 		height: 0,
 		width: 0,
 		videoBitrate: 0,
-		audioBitrate: 0,
+		audioBitrate: '0',
 	},
 	selectedUUIDs: [],
 }
@@ -27,7 +27,7 @@ export const useFFmpegVideoStore = persistent<{
 		height: number | string
 		width: number | string
 		videoBitrate: number | string
-		audioBitrate: number | string
+		audioBitrate: string
 	}
 	items: ((
 		| {
@@ -144,8 +144,7 @@ export const useFFmpegVideoStore = persistent<{
 									outputPath,
 									status: 'converted',
 									outputURL,
-									// @ts-expect-error 123
-									duration: endTime - startTime,
+									duration: endTime.valueOf() - startTime.valueOf(),
 									// @ts-expect-error 123
 									link: download({ outputPath, href: outputURL }),
 								}
