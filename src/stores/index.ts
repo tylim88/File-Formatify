@@ -6,13 +6,15 @@ export const modes = {
 		store: useFFmpegVideoStore,
 		types: videoTypes,
 		points: videoPoints,
-		title: 'Support .flv .mp4 .mkv .webm .wmv and more!',
+		title1: 'Video Converter',
+		title2: 'Support .flv .mp4 .mkv .webm .wmv and more!',
 	},
 	audio: {
 		store: useFFmpegAudioStore,
 		points: audioPoints,
 		types: audioTypes,
-		title: 'Support .mp3 .wav .mkv .aac .flac and more!',
+		title1: 'Audio Converter',
+		title2: 'Support .mp3 .wav .mkv .aac .flac and more!',
 	},
 } as const
 
