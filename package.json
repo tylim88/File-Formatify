@@ -99,7 +99,6 @@
 		"vite-plugin-mkcert": "^1.17.3",
 		"vite-plugin-qrcode": "^0.2.3",
 		"vite-plugin-remove-console": "^2.2.0",
-		"vite-plugin-static-copy": "^1.0.0",
 		"vite-plugin-svgr": "^4.2.0",
 		"vite-plugin-vsharp": "^1.7.3",
 		"vite-tsconfig-paths": "^4.3.1"

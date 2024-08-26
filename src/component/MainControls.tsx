@@ -1,5 +1,5 @@
 import { Button, Text, Checkbox, Grid } from '@mantine/core'
-import { useFFmpegVideoStore } from '@/stores'
+import { useFFmpegStore, modes, useFFmpegAudioStore } from '@/stores'
 import { useState } from 'react'
 import {
 	IconPlayerPlay,
@@ -8,14 +8,17 @@ import {
 	IconTrashX,
 	IconMail,
 } from '@tabler/icons-react'
-import { VideoSettings } from './VideoSettings'
+import { SettingsVideo } from './SettingsVideo'
+import { SettingsAudio } from './SettingsAudio'
 import { FeedBack } from './FeedBack'
 import { useDisclosure } from '@mantine/hooks'
 import { isChromium } from '@/utils'
 
-export const VideoMainControls = () => {
-	const items = useFFmpegVideoStore(state => state.items)
-	const selectedUUIDs = useFFmpegVideoStore(state => state.selectedUUIDs)
+export const MainControls = () => {
+	const mode = useFFmpegStore(state => state.mode)
+	const store = modes[mode].store as typeof useFFmpegAudioStore // ? why type mess up here
+	const items = store(state => state.items)
+	const selectedUUIDs = store(state => state.selectedUUIDs)
 	const [autoDownload, setIsAutoDownload] = useState(true)
 	const isNoSelection = selectedUUIDs.length === 0
 	const [isSettingsOpened, { open: openSettings, close: closeSettings }] =
@@ -24,7 +27,14 @@ export const VideoMainControls = () => {
 		useDisclosure(false)
 	return (
 		<>
-			<VideoSettings isOpened={isSettingsOpened} close={closeSettings} />
+			<SettingsVideo
+				isOpened={mode === 'video' ? isSettingsOpened : false}
+				close={closeSettings}
+			/>
+			<SettingsAudio
+				isOpened={mode === 'audio' ? isSettingsOpened : false}
+				close={closeSettings}
+			/>
 			<FeedBack isOpened={isFeedbackOpened} close={closeFeedback} />
 			<Grid>
 				<Grid.Col span={6} display="flex" style={{ justifyContent: 'end' }}>
@@ -46,7 +56,7 @@ export const VideoMainControls = () => {
 							isNoSelection || !items.some(item => item.status !== 'processing')
 						}
 						onClick={() => {
-							useFFmpegVideoStore.getState().convertSelected({ autoDownload })
+							store.getState().convertSelected({ autoDownload })
 						}}
 					>
 						Convert
@@ -60,7 +70,7 @@ export const VideoMainControls = () => {
 							isNoSelection || !items.some(item => item.status === 'converted')
 						}
 						variant="default"
-						onClick={() => useFFmpegVideoStore.getState().downloadSelected()}
+						onClick={() => store.getState().downloadSelected()}
 					>
 						<Text>Download</Text>
 					</Button>
@@ -72,7 +82,7 @@ export const VideoMainControls = () => {
 						disabled={isNoSelection}
 						variant="default"
 						onClick={() => {
-							useFFmpegVideoStore.getState().removeFiles(selectedUUIDs)
+							store.getState().removeFiles(selectedUUIDs)
 						}}
 					>
 						Delete

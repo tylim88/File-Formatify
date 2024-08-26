@@ -24,11 +24,11 @@ This project demonstrates how to easily create such an online converter.
 Roadmap:
 
 1. video converter (done)
-2. audio converter
+2. audio converter (done)
 3. image converter
 
-![homepage](./homepage.png)
-![homepage2](./homepage2.png)
+![homepage](.assets//homepage.png)
+![homepage2](.assets/homepage2.png)
 
 techs:
 

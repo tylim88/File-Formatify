@@ -9,14 +9,16 @@ import {
 	Grid,
 	Flex,
 } from '@mantine/core'
-import { useFFmpegVideoStore } from '@/stores'
+import { modes, useFFmpegStore, useFFmpegAudioStore } from '@/stores'
 import byteSize from 'byte-size'
 import { IconTrashX } from '@tabler/icons-react'
 import prettyMilliseconds from 'pretty-ms'
 import { useIsSmallestBreakpoint } from '@/hooks'
 export const VideoList = () => {
-	const items = useFFmpegVideoStore(state => state.items)
-	const selectedUUIDs = useFFmpegVideoStore(state => state.selectedUUIDs)
+	const mode = useFFmpegStore(state => state.mode)
+	const store = modes[mode].store as typeof useFFmpegAudioStore // ? why type mess up here
+	const items = store(state => state.items)
+	const selectedUUIDs = store(state => state.selectedUUIDs)
 	const isMobile = useIsSmallestBreakpoint()
 
 	return (
@@ -29,7 +31,7 @@ export const VideoList = () => {
 								aria-label="Select row"
 								checked={selectedUUIDs.length === items.length}
 								onChange={event =>
-									useFFmpegVideoStore.setState({
+									store.setState({
 										selectedUUIDs: event.currentTarget.checked
 											? items.map(({ uuid }) => uuid)
 											: [],
@@ -70,7 +72,7 @@ export const VideoList = () => {
 										aria-label="Select row"
 										checked={selectedUUIDs.includes(uuid)}
 										onChange={event =>
-											useFFmpegVideoStore.setState({
+											store.setState({
 												selectedUUIDs: event.currentTarget.checked
 													? [...selectedUUIDs, uuid]
 													: selectedUUIDs.filter(item => item !== uuid),
@@ -133,7 +135,7 @@ export const VideoList = () => {
 										color="dark"
 										variant="transparent"
 										onClick={() => {
-											useFFmpegVideoStore.getState().removeFiles([uuid])
+											store.getState().removeFiles([uuid])
 										}}
 									>
 										<IconTrashX size={16} />
