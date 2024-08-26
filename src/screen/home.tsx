@@ -26,9 +26,9 @@ export const Home = () => {
 	const points = modes[mode].points
 	const audioCount = useFFmpegAudioStore(state => state.items).length
 	const videoCount = useFFmpegVideoStore(state => state.items).length
-	const hasItems = videoCount > 0 || audioCount > 0
 	const isVideo = mode === 'video'
 	const isAudio = mode === 'audio'
+	const hasItems = (isVideo ? videoCount : isAudio ? audioCount : 0) > 0
 
 	return (
 		<Stack gap={0} align="center" justify="start" h="100%" px={0}>
