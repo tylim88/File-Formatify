@@ -9,14 +9,14 @@ import {
 	Grid,
 	Flex,
 } from '@mantine/core'
-import { modes, useFFmpegStore } from '@/stores'
+import { modes, useFFmpegStore, useFFmpegAudioStore } from '@/stores'
 import byteSize from 'byte-size'
 import { IconTrashX } from '@tabler/icons-react'
 import prettyMilliseconds from 'pretty-ms'
 import { useIsSmallestBreakpoint } from '@/hooks'
 export const VideoList = () => {
 	const mode = useFFmpegStore(state => state.mode)
-	const store = modes[mode].store
+	const store = modes[mode].store as typeof useFFmpegAudioStore // ? why type mess up here
 	const items = store(state => state.items)
 	const selectedUUIDs = store(state => state.selectedUUIDs)
 	const isMobile = useIsSmallestBreakpoint()

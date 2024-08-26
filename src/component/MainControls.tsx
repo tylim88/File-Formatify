@@ -1,5 +1,5 @@
 import { Button, Text, Checkbox, Grid } from '@mantine/core'
-import { useFFmpegStore, modes } from '@/stores'
+import { useFFmpegStore, modes, useFFmpegAudioStore } from '@/stores'
 import { useState } from 'react'
 import {
 	IconPlayerPlay,
@@ -16,7 +16,7 @@ import { isChromium } from '@/utils'
 
 export const MainControls = () => {
 	const mode = useFFmpegStore(state => state.mode)
-	const store = modes[mode].store
+	const store = modes[mode].store as typeof useFFmpegAudioStore // ? why type mess up here
 	const items = store(state => state.items)
 	const selectedUUIDs = store(state => state.selectedUUIDs)
 	const [autoDownload, setIsAutoDownload] = useState(true)
