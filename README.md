@@ -15,7 +15,7 @@ Traditional converters have several disadvantages:
 2. Privacy concerns: The conversion process occurs on the backend, which may raise issues regarding data security and privacy.
 3. Some converters are completely free and client-side only, but they require a download and installation, which can pose security risks.
 
-But what if we could have a client-side-only converter that runs entirely in the browser, with no installation and no artificial restrictions?
+**But what if we could have a client-side-only converter that runs entirely in the browser, with no installation and no artificial restrictions?**
 
 JavaScript is a single-threaded programming language, making it impractical for video conversion due to slow processing speeds. However, with WebAssembly, this becomes much more feasible. While the speed is still behind native applications, it is significantly faster than using JavaScript alone.
 
