@@ -117,7 +117,7 @@ export const FileList = () => {
 											<Text truncate>{sizeText}</Text>
 										</Table.Td>
 										<Table.Td>
-											{status !== 'processing' ? (
+											{status === 'processing' ? (
 												<Center>
 													<Loader size="xs" color="white" />
 												</Center>
