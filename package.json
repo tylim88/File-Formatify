@@ -3,7 +3,7 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
-	"description": "Wiki for mobile game Brown Dust 2",
+	"description": "An absolutely free, client-side-only video converter web app with no artificial restrictions.",
 	"scripts": {
 		"utility-scripts": "====================utilities========================",
 		"un": "rm -rf node_modules && rm -rf package-lock.json",

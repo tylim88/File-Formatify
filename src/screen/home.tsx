@@ -2,7 +2,7 @@ import {
 	Dropzone,
 	FooterSocial,
 	Title,
-	VideoList,
+	FileList,
 	MainControls,
 	DropzoneMini,
 	Points,
@@ -68,7 +68,7 @@ export const Home = () => {
 					<>
 						<MainControls />
 						<DropzoneMini onDrop={store.getState().addFiles} accept={types} />
-						<VideoList />
+						<FileList />
 					</>
 				) : (
 					<>

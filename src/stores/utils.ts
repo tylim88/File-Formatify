@@ -101,10 +101,6 @@ export const persistent = <T extends { [s: string]: unknown }>(
 		)
 	)
 
-export type Status = { status: 'error' | 'ok' | 'loading' }
-
-export type ScrollFetchStatus = 'loading' | 'ok' | 'no more' | 'error'
-
 type PersistListener<S> = (state: S) => void
 type StorePersist<S, Ps> = {
 	persist: {

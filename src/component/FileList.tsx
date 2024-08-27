@@ -14,9 +14,10 @@ import byteSize from 'byte-size'
 import { IconTrashX } from '@tabler/icons-react'
 import prettyMilliseconds from 'pretty-ms'
 import { useIsSmallestBreakpoint } from '@/hooks'
-export const VideoList = () => {
+
+export const FileList = () => {
 	const mode = useFFmpegStore(state => state.mode)
-	const store = modes[mode].store as typeof useFFmpegAudioStore // ? why type mess up here
+	const store = modes[mode].store as typeof useFFmpegAudioStore // ? shouldn't have to annotate type here, why?
 	const items = store(state => state.items)
 	const selectedUUIDs = store(state => state.selectedUUIDs)
 	const isMobile = useIsSmallestBreakpoint()
@@ -56,6 +57,7 @@ export const VideoList = () => {
 							uuid,
 							status,
 						} = item
+
 						const time =
 							status === 'converted'
 								? prettyMilliseconds(item.duration)
@@ -99,11 +101,7 @@ export const VideoList = () => {
 													</Text>
 												</Grid.Col>
 												<Grid.Col span={6}>
-													{status === 'processing' ? (
-														<Flex h="100%" w="100%" justify="end">
-															<Loader size="xs" color="white" />
-														</Flex>
-													) : (
+													{status === 'processing' ? null : (
 														<Text ta="right" fw="bold" size="sm">
 															{time}
 														</Text>
@@ -119,7 +117,7 @@ export const VideoList = () => {
 											<Text truncate>{sizeText}</Text>
 										</Table.Td>
 										<Table.Td>
-											{status === 'processing' ? (
+											{status !== 'processing' ? (
 												<Center>
 													<Loader size="xs" color="white" />
 												</Center>
