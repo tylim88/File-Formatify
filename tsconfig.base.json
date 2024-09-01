@@ -9,8 +9,6 @@
 		"noUnusedParameters": false,
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
-		"exactOptionalPropertyTypes": true,
-
-	},
-	"include": ["src"]
+		"exactOptionalPropertyTypes": true
+	}
 }
